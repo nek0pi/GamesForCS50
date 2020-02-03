@@ -276,16 +276,15 @@ function love.update(dt)
     -- determine whether the ball goes up or down (to prevent paddles from "trembling" - going up and down) 
     -- bug still present when playing fullscreen on this build 03.02.2020
     --
+    goesup = 1
     if ball.dy > 0 then
         goesup = 0
-    else
-        goesup = 1
     end
 
     --
     -- simple AI part for player 2 #Nekopi change
     --
-    -- + player2.height/2 needed to make paddle bounce the ball from the center
+    -- "+ player2.height/2" needed to make paddle bounce the ball from the center
     --
     if gamemode == 1 or gamemode == 2 then
         if math.floor(ball.y) < math.floor(player2.y + player2.height/2) and goesup == 1 then
