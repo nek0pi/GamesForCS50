@@ -22,7 +22,7 @@ function PlayState:init()
     self.pipePairs = {}
     self.timer = 0
     self.score = 0
-
+    
     -- initialize our last recorded Y value for a gap placement to base other gaps off of
     self.lastY = -PIPE_HEIGHT + math.random(80) + 20
 end
@@ -31,8 +31,8 @@ function PlayState:update(dt)
     -- update timer for pipe spawning
     self.timer = self.timer + dt
 
-    -- spawn a new pipe pair every second and a half
-    if self.timer > 2 then
+    -- spawn a new pipe pair every second and a half - randomized number #Nekopi change
+    if self.timer > math.random(2, 4) then
         -- modify the last Y coordinate we placed so pipe gaps aren't too far apart
         -- no higher than 10 pixels below the top edge of the screen,
         -- and no lower than a gap length (90 pixels) from the bottom
@@ -72,7 +72,7 @@ function PlayState:update(dt)
             table.remove(self.pipePairs, k)
         end
     end
-
+--[[
     -- simple collision between bird and all pipes in pairs
     for k, pair in pairs(self.pipePairs) do
         for l, pipe in pairs(pair.pipes) do
@@ -86,7 +86,7 @@ function PlayState:update(dt)
             end
         end
     end
-
+]]
     -- update bird based on gravity and input
     self.bird:update(dt)
 
@@ -125,5 +125,10 @@ end
 ]]
 function PlayState:exit()
     -- stop scrolling for the death/score screen
+    scrolling = false
+end
+
+-- Called when this state changes to pause
+function PlayState:pause()
     scrolling = false
 end

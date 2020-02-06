@@ -22,5 +22,8 @@ function TitleScreenState:render()
     love.graphics.printf('Fifty Bird', 0, 64, VIRTUAL_WIDTH, 'center')
 
     love.graphics.setFont(mediumFont)
-    love.graphics.printf('Press Enter', 0, 100, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Press Enter to play', 0, 140, VIRTUAL_WIDTH, 'center')
+
+    love.graphics.setFont(smallFont)
+    love.graphics.printf('Nekopi Edition', 0, VIRTUAL_HEIGHT - 50, VIRTUAL_WIDTH, 'center')
 end
