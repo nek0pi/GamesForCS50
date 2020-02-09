@@ -51,10 +51,10 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
 
-local background = love.graphics.newImage('background.png')
+local background = love.graphics.newImage('images/background.png')
 local backgroundScroll = 0
 
-local ground = love.graphics.newImage('ground.png')
+local ground = love.graphics.newImage('images/ground.png')
 local groundScroll = 0
 
 local BACKGROUND_SCROLL_SPEED = 30
@@ -81,13 +81,13 @@ function love.load()
 
     -- initialize our table of sounds
     sounds = {
-        ['jump'] = love.audio.newSource('jump.wav', 'static'),
-        ['explosion'] = love.audio.newSource('explosion.wav', 'static'),
-        ['hurt'] = love.audio.newSource('hurt.wav', 'static'),
-        ['score'] = love.audio.newSource('score.wav', 'static'),
+        ['jump'] = love.audio.newSource('sounds/jump.wav', 'static'),
+        ['explosion'] = love.audio.newSource('sounds/explosion.wav', 'static'),
+        ['hurt'] = love.audio.newSource('sounds/hurt.wav', 'static'),
+        ['score'] = love.audio.newSource('sounds/score.wav', 'static'),
 
         -- https://freesound.org/people/xsgianni/sounds/388079/
-        ['music'] = love.audio.newSource('marios_way.mp3', 'static')
+        ['music'] = love.audio.newSource('sounds/marios_way.mp3', 'static')
     }
 
     -- kick off music

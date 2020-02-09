@@ -16,9 +16,9 @@ ScoreState = Class{__includes = BaseState}
 ]]
 function ScoreState:enter(params)
     self.score = params.score
-    self.goldimg = love.graphics.newImage('gold.png')
-    self.silverimg = love.graphics.newImage('silver.png')
-    self.bronzeimg = love.graphics.newImage('bronze.png')
+    self.goldimg = love.graphics.newImage('images/gold.png')
+    self.silverimg = love.graphics.newImage('images/silver.png')
+    self.bronzeimg = love.graphics.newImage('images/bronze.png')
     self.gold = 0
     self.silver = 0
     self.bronze = 0
