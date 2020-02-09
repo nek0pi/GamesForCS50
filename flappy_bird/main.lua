@@ -172,4 +172,13 @@ function love.draw()
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
     
     push:finish()
+    -- Remove by commenting #Nekopi change
+    displayFPS()
+    
+   
+end
+function displayFPS()
+    -- simple FPS display across all states
+    love.graphics.setFont(mediumFont)
+    love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 8, VIRTUAL_HEIGHT + 370)
 end

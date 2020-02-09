@@ -10,8 +10,6 @@
 
 PipePair = Class{}
 
--- size of the gap between pipes
-local GAP_HEIGHT = 90
 
 function PipePair:init(y)
     -- flag to hold whether this pair has been scored (jumped through)
@@ -22,6 +20,9 @@ function PipePair:init(y)
 
     -- y value is for the topmost pipe; gap is a vertical shift of the second lower pipe
     self.y = y
+
+    -- Randomize the gap between pipes #Nekopi change
+    local GAP_HEIGHT = math.random( 85, 130 )
 
     -- instantiate two pipes that belong to this pair
     self.pipes = {

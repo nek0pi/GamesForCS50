@@ -25,5 +25,8 @@ function TitleScreenState:render()
     love.graphics.printf('Press Enter to play', 0, 140, VIRTUAL_WIDTH, 'center')
 
     love.graphics.setFont(smallFont)
-    love.graphics.printf('Nekopi Edition', 0, VIRTUAL_HEIGHT - 50, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Nekopi Edition - debug', 0, VIRTUAL_HEIGHT - 50, VIRTUAL_WIDTH, 'center')
+
+    love.graphics.setFont(smallFont)
+    love.graphics.printf('Press F12 to change to godmode', 0, VIRTUAL_HEIGHT - 30, VIRTUAL_WIDTH, 'center')
 end

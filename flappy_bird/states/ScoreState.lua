@@ -16,12 +16,21 @@ ScoreState = Class{__includes = BaseState}
 ]]
 function ScoreState:enter(params)
     self.score = params.score
+    self.goldimg = love.graphics.newImage('gold.png')
+    self.silverimg = love.graphics.newImage('silver.png')
+    self.bronzeimg = love.graphics.newImage('bronze.png')
+    self.gold = 0
+    self.silver = 0
+    self.bronze = 0
 end
 
 function ScoreState:update(dt)
     -- go back to play if enter is pressed
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
         gStateMachine:change('countdown')
+    end
+    if self.score >= 2 then
+        self.bronze = 1
     end
 end
 
@@ -33,5 +42,13 @@ function ScoreState:render()
     love.graphics.setFont(mediumFont)
     love.graphics.printf('Score: ' .. tostring(self.score), 0, 100, VIRTUAL_WIDTH, 'center')
 
-    love.graphics.printf('Press Enter to Play Again!', 0, 160, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Press Enter to Play Again!', 0, 140, VIRTUAL_WIDTH, 'center')
+    
+    love.graphics.printf('Your prizes:', 0, 180, VIRTUAL_WIDTH, 'center')
+    if self.bronze == 1 then
+        love.graphics.draw(self.bronzeimg, 150 , 200 )
+        love.graphics.setFont(smallFont)
+        love.graphics.printf('You got 5 points!',-85, 250, VIRTUAL_WIDTH, 'center')
+    end
+
 end
