@@ -38,6 +38,7 @@ function PlayState:update(dt)
 
         -- spawn a new pipe pair every second and a half - randomized number between 1.6 and 3 #Nekopi change
         if self.timer > rand then
+            print("Pipe has spawn with this gap (horizontal): " .. tostring(rand))
             -- modify the last Y coordinate we placed so pipe gaps aren't too far apart
             -- no higher than 10 pixels below the top edge of the screen,
             -- and no lower than a gap length (90 pixels) from the bottom
@@ -83,8 +84,10 @@ function PlayState:update(dt)
         if love.keyboard.wasPressed('f12') then
             if godmode == 1 then
                 godmode = 0
+                print("godmode - off")
             else
                 godmode = 1
+                print("godmode - on")
             end
         end
 
@@ -125,11 +128,13 @@ function PlayState:update(dt)
                     sounds['pause']:play()
                     sounds['music']:resume()
                     scrolling = true
+                    print("pause - off")
                 else
                     pause = 1
                     sounds['pause']:play()
                     sounds['music']:pause()
                     scrolling = false
+                    print("pause - on")
                 end
             end
 end
