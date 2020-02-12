@@ -29,7 +29,12 @@ Not every level needs to have locked Bricks; just include them occasionally! Per
 points as well in order to compel their design. Note that this feature will require changes to several parts of 
 the code, including even splitting up the sprite sheet into Bricks!
 
+todo add a sound of unlocking a locked block
+todo add a particle effects after unlocking a locked block w/ key
+todo add more scores when destroying a locked block w/ key
+todo add a sound when hitting blocked block
 
+! BUG TO FIX: after reaching 5000 score you will always get extra heart
 * Objectives
 - Read and understand all of the Breakout source code from Lecture 1.
 - Add a powerup to the game that spawns two extra Balls.
