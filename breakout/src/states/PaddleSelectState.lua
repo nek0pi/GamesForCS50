@@ -41,7 +41,7 @@ function PaddleSelectState:update(dt)
         end
     end
 
-    -- select paddle and move on to the serve state, passing in the selection
+    -- * select paddle and move on to the serve state, passing in the selection
     if love.keyboard.wasPressed('return') or love.keyboard.wasPressed('enter') then
         gSounds['confirm']:play()
 
@@ -52,7 +52,8 @@ function PaddleSelectState:update(dt)
             score = 0,
             highScores = self.highScores,
             level = 32,
-            recoverPoints = 5000
+            recoverPoints = 5000,
+            paddlesize = 2
         })
     end
 

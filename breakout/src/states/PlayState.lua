@@ -28,13 +28,17 @@ function PlayState:enter(params)
     self.highScores = params.highScores
     self.ball = params.ball
     self.level = params.level
+    -- Bug with recoverpoints Fixed
+    self.recoverPoints = params.recoverPoints
 
-    self.recoverPoints = 5000
+    -- Size of the paddle 
+    self.paddle.size = params.paddlesize
 
     -- give ball random starting velocity
     self.ball.dx = math.random(-200, 200)
     -- ? Changed it from "-50 , -60" 
     self.ball.dy = math.random(-60, -100)
+    print(self.paddlesize)
 end
 
 function PlayState:update(dt)
@@ -88,10 +92,12 @@ function PlayState:update(dt)
             -- trigger the brick's hit function, which removes it from play
             brick:hit()
 
-            -- if we have enough points, recover a point of health
+            -- * if we have enough points, recover a point of health and grow
             if self.score > self.recoverPoints then
                 -- can't go above 3 health
                 self.health = math.min(3, self.health + 1)
+                -- can't go above 4 sizes
+                self.paddle.size = math.min(4, self.paddle.size + 1)
 
                 -- multiply recover points by 2
                 self.recoverPoints = math.min(100000, self.recoverPoints * 2)
@@ -154,7 +160,8 @@ function PlayState:update(dt)
                 self.ball.dy = -self.ball.dy
                 self.ball.y = brick.y + 16
             end
-
+            
+            -- * Scaling the veloicty throughout the game
             -- slightly scale the y velocity to speed up the game, capping at +- 150
             if math.abs(self.ball.dy) < 150 then
                 self.ball.dy = self.ball.dy * 1.02
@@ -165,9 +172,13 @@ function PlayState:update(dt)
         end
     end
 
-    -- if ball goes below bounds, revert to serve state and decrease health
+    -- *if ball goes below bounds, revert to serve state and decrease health
     if self.ball.y >= VIRTUAL_HEIGHT then
         self.health = self.health - 1
+        -- shrinks a paddle in size not less then 2
+        if self.paddle.size > 1 then
+            self.paddle.size = self.paddle.size - 1
+        end
         gSounds['hurt']:play()
 
         if self.health == 0 then
@@ -183,7 +194,8 @@ function PlayState:update(dt)
                 score = self.score,
                 highScores = self.highScores,
                 level = self.level,
-                recoverPoints = self.recoverPoints
+                recoverPoints = self.recoverPoints,
+                paddlesize = self.paddle.size
             })
         end
     end

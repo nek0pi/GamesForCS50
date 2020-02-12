@@ -52,6 +52,16 @@ function Paddle:update(dt)
         self.dx = 0
     end
 
+    if self.size == 1 then
+        self.width = 32
+    elseif self.size == 2 then
+        self.width = 32 * 2
+    elseif self.size == 3 then
+        self.width = 32 * 3
+    elseif self.size == 4 then
+        self.width = 32*4
+    end
+    
     -- math.max here ensures that we're the greater of 0 or the player's
     -- current calculated Y position when pressing up so that we don't
     -- go into the negatives; the movement calculation is simply our

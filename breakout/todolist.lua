@@ -6,7 +6,7 @@ we’ll be diving in a little bit more and adding some new features entirely!
 ! Your goals this assignment:
 
 
-todo / Add a Powerup class to the game that spawns a powerup 
+todo / Add a Powerup class to the game that spawns a powerup with a 1/6 chance after destroying a block
 (images located at the bottom of the sprite sheet in the distribution code). 
 * This Powerup should spawn randomly, be it on a timer or when the Ball hits a Block enough times, and 
 gradually descend toward the player. Once collided with the Paddle, two more Balls should spawn and behave 
@@ -14,7 +14,7 @@ identically to the original, including all collision and scoring points for the 
 proceeds to the VictoryState for their current level, the Balls should reset so that there is only one active again.
 
 
-todo / Grow and shrink the Paddle such that it’s no longer just one fixed size forever. 
+// / Grow and shrink the Paddle such that it’s no longer just one fixed size forever. 
 In particular, the Paddle should shrink if the player loses a heart (but no smaller of course than the smallest paddle size) 
 and should grow if the player exceeds a certain amount of score (but no larger than the largest Paddle). This may not make the game 
 completely balanced once the Paddle is sufficiently large, but it will be a great way to get comfortable interacting with 
@@ -34,12 +34,15 @@ todo add a sound of unlocking a locked block
 todo add a particle effects after unlocking a locked block w/ key
 todo add more scores when destroying a locked block w/ key
 todo add a sound when hitting blocked block
+? Could feature AI
 
-! BUG TO FIX: after reaching 5000 score you will always get extra heart
+// BUG TO FIX: after reaching 5000 score you will always get extra heart
+// Just attach recoverPoints to the state after lose
+
 * Objectives
 - Read and understand all of the Breakout source code from Lecture 1.
 - Add a powerup to the game that spawns two extra Balls.
-- Grow and shrink the Paddle when the player gains enough points or loses a life.
+* Finished Grow and shrink the Paddle when the player gains enough points or loses a life.
 - Add a locked Brick that will only open when the player collects a second new powerup, a key, 
   which should only spawn when such a Brick exists and randomly as per the Ball powerup.
 
