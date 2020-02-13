@@ -14,13 +14,17 @@ identically to the original, including all collision and scoring points for the 
 proceeds to the VictoryState for their current level, the Balls should reset so that there is only one active again.
 ! Also loose now only if ALL balls went through the bottom 
 
-todo make powerup to be gone after it's collision with paddle
-todo create a separate class for powerups
+// make powerup to be gone after it's collision with paddle
+// create a separate class for powerups
+todo add a table containing ball objects
+
 todo spawn 2 more balls with condition at the location of an existing ball and give them random dy and dx
 todo change mechanic of loose (add a counter to count number of balls)
-todo make powerup object spawn at a block y and x
-todo make it decent toward the player (dy = value)
-todo add a quad for powerups (add it to gFrames and gTexture)
+
+//todo make powerup object spawn at a block y and x
+//todo add a sound when it collides with the player
+// make it decent toward the player (dy = value)
+// add a quad for powerups (add it to gFrames and gTexture)
 
 // / Grow and shrink the Paddle such that it’s no longer just one fixed size forever. 
 In particular, the Paddle should shrink if the player loses a heart (but no smaller of course than the smallest paddle size) 

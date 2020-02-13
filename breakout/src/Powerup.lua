@@ -12,14 +12,19 @@
 ]]
 Powerup = Class{}
 
-function Powerup:init(skin)
+function Powerup:init(skin, x, y, dy)
     -- simple positional and dimensional variables
     self.width = 16
     self.height = 16
+    self.x = x
+    self.y = y
 
     -- these variable is for keeping track of our velocity on Y axis, 
     -- since the powerup can only move in one dimension
-    self.dy = 0
+    self.dy = dy
+
+    -- used to determine whether this Powerup should be rendered
+    self.inPlay = true
 
     -- this will effectively be the skin of our powerup, and we will index
     -- our table of Quads relating to the global block texture using this
@@ -47,13 +52,27 @@ function Powerup:collides(target)
     return true
 end
 
+function Powerup:consumes()
+    if self.inPlay then
+        self.inPlay = false
+        -- todo remove debug
+        print("You got a powerup!")
+        gSounds['powerup']:stop()
+        gSounds['powerup']:play()
+    end
+    
+    
+end
+
 function Powerup:update(dt)
     self.y = self.y + self.dy * dt
 end
 
 function Powerup:render()
+    if self.inPlay then
     -- gTexture is our global texture for all blocks
     -- gBallFrames is a table of quads mapping to each individual ball skin in the texture
-    love.graphics.draw(gTextures['main'], gFrames['powerup'][self.skin],
-        self.x, self.y)
+        love.graphics.draw(gTextures['main'], gFrames['powerup'][self.skin],
+            self.x, self.y)
+    end
 end

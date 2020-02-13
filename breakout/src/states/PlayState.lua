@@ -4,8 +4,11 @@
 
     -- PlayState Class --
 
-    Author: Colton Ogden
+    * Author: Colton Ogden
     cogden@cs50.harvard.edu
+
+    * Remaker: Nek0pi
+    github.com/nek0pi
 
     Represents the state of the game in which we are actively playing;
     player should control the paddle, with the ball actively bouncing between
@@ -37,14 +40,16 @@ function PlayState:enter(params)
     -- give ball random starting velocity
     self.ball.dx = math.random(-200, 200)
     -- ? Changed it from "-50 , -60" 
-    self.ball.dy = math.random(-60, -100)
+    self.ball.dy = math.random(-60, -80)
 
     --
-    -- PowerUpTest
+    -- !PowerUpTest
     --
-    power = Powerup(1)
-    power.x = 16
-    power.y = 16
+    self.powers = {}
+    self.counterhits = 0
+    -- add a new pipe pair at the end of the screen at our new Y
+    -- table.insert(self.pipePairs, PipePair(y))
+
 
 end
 
@@ -65,7 +70,6 @@ function PlayState:update(dt)
     -- update positions based on velocity
     self.paddle:update(dt)
     self.ball:update(dt)
-    power:update(dt)
 
     if self.ball:collides(self.paddle) then
         -- raise ball above paddle in case it goes below it, then reverse dy
@@ -88,11 +92,59 @@ function PlayState:update(dt)
         gSounds['paddle-hit']:play()
     end
 
+    --
+    -- !Powerup mechanics after colliding with paddle
+    -- 
+    for k, power in pairs(self.powers) do
+        power:update(dt)
+
+        if power:collides(self.paddle) then
+            power:consumes()
+
+            if power.skin == 3 then
+                print("You got hearts!")
+                -- can't go above 3 health
+                self.health = math.min(3, self.health + 1)
+            end
+
+            if power.skin == 4 then
+                print("You got 3 balls!")
+            end
+
+            table.remove(self.powers, k)
+        end
+        
+    end
+    --
+    --
+    --
+
     -- detect collision across all bricks with the ball
     for k, brick in pairs(self.bricks) do
 
         -- only check collision if we're in play
         if brick.inPlay and self.ball:collides(brick) then
+
+            --* Update counter for how many hits were done (For powerups)
+            self.counterhits = self.counterhits + 1
+
+            --
+            --! Conditions to spawn powerups
+            --
+            -- 3 balls powerup
+            if self.counterhits >= 16 and math.random(1,4) == 2 then
+                table.insert( self.powers, Powerup(4, brick.x, brick.y, 30) )
+                self.counterhits = self.counterhits/2
+            end
+
+            -- hearts powerup
+            if self.counterhits >= 26 and math.random(1,4) == 2 then
+                table.insert( self.powers, Powerup(3, brick.x, brick.y, 30))
+                self.counterhits = self.counterhits/2
+            end
+            --
+            --
+            --
 
             -- add to score
             self.score = self.score + (brick.tier * 200 + brick.color * 25)
@@ -231,7 +283,11 @@ function PlayState:render()
 
     self.paddle:render()
     self.ball:render()
-    power:render()
+
+    -- ! Rendering powerups
+    for k, power in pairs(self.powers) do
+        power:render()
+    end
     
     renderScore(self.score)
     renderHealth(self.health)

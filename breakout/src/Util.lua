@@ -133,12 +133,12 @@ end
 ]]
 function GenerateQuadsPowerUp(atlas)
     local x = 0
-    local y = 240
+    local y = 192
 
     local counter = 1
     local quads = {}
 
-    for i = 0, 3 do
+    for i = 0, 9 do
         quads[counter] = love.graphics.newQuad(x, y, 16, 16, atlas:getDimensions())
         x = x + 16
         counter = counter + 1
