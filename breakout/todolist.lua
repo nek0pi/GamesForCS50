@@ -6,13 +6,21 @@ we’ll be diving in a little bit more and adding some new features entirely!
 ! Your goals this assignment:
 
 
-todo / Add a Powerup class to the game that spawns a powerup with a 1/6 chance after destroying a block
+TODO / Add a Powerup class to the game that spawns a powerup with a chance after destroying a block
 (images located at the bottom of the sprite sheet in the distribution code). 
 * This Powerup should spawn randomly, be it on a timer or when the Ball hits a Block enough times, and 
 gradually descend toward the player. Once collided with the Paddle, two more Balls should spawn and behave 
 identically to the original, including all collision and scoring points for the player. Once the player wins and 
 proceeds to the VictoryState for their current level, the Balls should reset so that there is only one active again.
+! Also loose now only if ALL balls went through the bottom 
 
+todo make powerup to be gone after it's collision with paddle
+todo create a separate class for powerups
+todo spawn 2 more balls with condition at the location of an existing ball and give them random dy and dx
+todo change mechanic of loose (add a counter to count number of balls)
+todo make powerup object spawn at a block y and x
+todo make it decent toward the player (dy = value)
+todo add a quad for powerups (add it to gFrames and gTexture)
 
 // / Grow and shrink the Paddle such that it’s no longer just one fixed size forever. 
 In particular, the Paddle should shrink if the player loses a heart (but no smaller of course than the smallest paddle size) 
@@ -21,7 +29,7 @@ completely balanced once the Paddle is sufficiently large, but it will be a grea
 Quads and all of the tables we have allocated for them in main.lua!
 
 
-todo / Add a locked Brick (located in the sprite sheet) to the level spawning, as well as a key powerup 
+TODO / Add a locked Brick (located in the sprite sheet) to the level spawning, as well as a key powerup 
 (also in the sprite sheet). The locked Brick should not be breakable by the ball normally, unless they of course 
 have the key Powerup! The key Powerup should spawn randomly just like the Ball Powerup and descend toward the bottom 
 of the screen just the same, where the Paddle has the chance to collide with it and pick it up. You’ll need to take 

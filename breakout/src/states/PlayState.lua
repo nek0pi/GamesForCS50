@@ -38,7 +38,14 @@ function PlayState:enter(params)
     self.ball.dx = math.random(-200, 200)
     -- ? Changed it from "-50 , -60" 
     self.ball.dy = math.random(-60, -100)
-    print(self.paddlesize)
+
+    --
+    -- PowerUpTest
+    --
+    power = Powerup(1)
+    power.x = 16
+    power.y = 16
+
 end
 
 function PlayState:update(dt)
@@ -58,6 +65,7 @@ function PlayState:update(dt)
     -- update positions based on velocity
     self.paddle:update(dt)
     self.ball:update(dt)
+    power:update(dt)
 
     if self.ball:collides(self.paddle) then
         -- raise ball above paddle in case it goes below it, then reverse dy
@@ -223,7 +231,8 @@ function PlayState:render()
 
     self.paddle:render()
     self.ball:render()
-
+    power:render()
+    
     renderScore(self.score)
     renderHealth(self.health)
 
