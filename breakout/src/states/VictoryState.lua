@@ -19,8 +19,10 @@ function VictoryState:enter(params)
     self.highScores = params.highScores
     self.paddle = params.paddle
     self.health = params.health
-    self.ball = params.ball
+    self.ball = Ball()
+    self.ball.skin = math.random(7)
     self.recoverPoints = params.recoverPoints
+    self.paddle.size = params.paddlesize
 end
 
 function VictoryState:update(dt)
@@ -39,7 +41,8 @@ function VictoryState:update(dt)
             health = self.health,
             score = self.score,
             highScores = self.highScores,
-            recoverPoints = self.recoverPoints
+            recoverPoints = self.recoverPoints,
+            paddlesize = self.paddle.size
         })
     end
 end

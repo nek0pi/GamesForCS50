@@ -16,10 +16,13 @@ proceeds to the VictoryState for their current level, the Balls should reset so 
 
 // make powerup to be gone after it's collision with paddle
 // create a separate class for powerups
-todo add a table containing ball objects
-
-todo spawn 2 more balls with condition at the location of an existing ball and give them random dy and dx
-todo change mechanic of loose (add a counter to count number of balls)
+//todo add a table containing ball objects
+//todo change all self.ball occurences to use objects from table
+?todo when balls collide they should behave like colliding a brick 
+?todo spawn 2 more balls with condition at the location of an existing ball and give them random dy and dx
+?todo I could do number of box limitation?
+//todo spawn 2 more balls from the paddle (less problems with this approach)
+//todo change mechanic of loose (add a counter to count number of balls)
 
 //todo make powerup object spawn at a block y and x
 //todo add a sound when it collides with the player
@@ -52,8 +55,8 @@ todo add a sound when hitting blocked block
 // Just attach recoverPoints to the state after lose
 
 * Objectives
-- Read and understand all of the Breakout source code from Lecture 1.
-- Add a powerup to the game that spawns two extra Balls.
+* Read and understand all of the Breakout source code from Lecture 1.
+* Add a powerup to the game that spawns two extra Balls.
 * Finished Grow and shrink the Paddle when the player gains enough points or loses a life.
 - Add a locked Brick that will only open when the player collects a second new powerup, a key, 
   which should only spawn when such a Brick exists and randomly as per the Ball powerup.
