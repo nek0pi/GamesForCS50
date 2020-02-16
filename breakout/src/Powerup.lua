@@ -55,8 +55,6 @@ end
 function Powerup:consumes()
     if self.inPlay then
         self.inPlay = false
-        -- todo remove debug
-        print("You got a powerup!")
         gSounds['powerup']:stop()
         gSounds['powerup']:play()
     end

@@ -55,12 +55,18 @@ function love.load()
 
     -- load up the graphics we'll be using throughout our states
     gTextures = {
-        ['background'] = love.graphics.newImage('graphics/background.png'),
+        ['background1'] = love.graphics.newImage('graphics/background.png'),
+        ['background2'] = love.graphics.newImage('graphics/background2.png'),
+        ['background3'] = love.graphics.newImage('graphics/background3.png'),
+        ['background4'] = love.graphics.newImage('graphics/background4.png'),
+
         ['main'] = love.graphics.newImage('graphics/breakout.png'),
         ['arrows'] = love.graphics.newImage('graphics/arrows.png'),
         ['hearts'] = love.graphics.newImage('graphics/hearts.png'),
         ['particle'] = love.graphics.newImage('graphics/particle.png')
     }
+    -- Pick random background every time
+    mainbackground = gTextures["background" .. math.random(1, 4)]
 
     -- Quads we will generate for all of our textures; Quads allow us
     -- to show only part of a texture and not the entire thing
@@ -92,6 +98,8 @@ function love.load()
         ['no-select'] = love.audio.newSource('sounds/no-select.wav'),
         ['brick-hit-1'] = love.audio.newSource('sounds/brick-hit-1.wav'),
         ['brick-hit-2'] = love.audio.newSource('sounds/brick-hit-2.wav'),
+        ['locked-hit'] = love.audio.newSource('sounds/locked-hit.wav'),
+        ['locked-hit2'] = love.audio.newSource('sounds/locked-hit2.wav'),
         ['hurt'] = love.audio.newSource('sounds/hurt.wav'),
         ['victory'] = love.audio.newSource('sounds/victory.wav'),
         ['recover'] = love.audio.newSource('sounds/recover.wav'),
@@ -128,13 +136,10 @@ function love.load()
     })
 
     -- play our music outside of all states and set it to looping
-    --[[
-    !Muted the music
-    TODO change the volume of music.
-    
+    gSounds['music']:setVolume(0.2)
     gSounds['music']:play()
     gSounds['music']:setLooping(true)
-]]
+
     -- a table we'll use to keep track of which keys have been pressed this
     -- frame, to get around the fact that LÖVE's default callback won't let us
     -- test for input from within other functions
@@ -201,10 +206,10 @@ function love.draw()
 
     -- background should be drawn regardless of state, scaled to fit our
     -- virtual resolution
-    local backgroundWidth = gTextures['background']:getWidth()
-    local backgroundHeight = gTextures['background']:getHeight()
+    local backgroundWidth = mainbackground:getWidth()
+    local backgroundHeight = mainbackground:getHeight()
 
-    love.graphics.draw(gTextures['background'], 
+    love.graphics.draw(mainbackground, 
         -- draw at coordinates 0, 0
         0, 0, 
         -- no rotation

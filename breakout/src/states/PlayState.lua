@@ -37,31 +37,37 @@ function PlayState:enter(params)
     -- Size of the paddle 
     self.paddle.size = params.paddlesize
 
-    --
-    -- !BallsTest
-    --
-
-    self.temp = {}
-    table.insert(self.temp, params.ball)
-
-    for b, ball in pairs(self.temp) do
-        -- give ball random starting velocity
-        ball.dx = math.random(-200, 200)
-        ball.dy = math.random(-60, -80)
-    end
-    ballcounter = 1
-    --
-    --
-    --
+    self.hasfoundakey = params.key
 
     --
-    -- !PowerUpTest
+    -- !Balls Related stuff
     --
+    -- table containing all balls
+    self.balltable = {}
+    -- Putting there the first ball
+    table.insert(self.balltable, params.ball)
+
+    -- give first ball random starting velocity
+    self.balltable[1].dx = math.random(-200, 200)
+    self.balltable[1].dy = math.random(-60, -80)
+
+    -- counter for balls to keep track
+    self.ballcounter = 1
+    --
+    --
+
+    --
+    -- !PowerUp Related stuff
+    --
+    --table containing all balls
     self.powers = {}
+    -- counter of how many times did ball hit a brick  
     self.counterhits = 0
-    -- add a new pipe pair at the end of the screen at our new Y
-    -- table.insert(self.pipePairs, PipePair(y))
 
+    -- variable to show if locked brick was created (to spawn keypowerup) 
+    self.lockedcreated = lockedcreated
+    --
+    
 
 end
 
@@ -83,10 +89,8 @@ function PlayState:update(dt)
     self.paddle:update(dt)
 
     --!Balls update
-    for b, ball in pairs(self.temp) do
-        
-
-        
+    for b, ball in pairs(self.balltable) do
+         
         if ball:collides(self.paddle) then
             -- raise ball above paddle in case it goes below it, then reverse dy
             ball.y = self.paddle.y - 8
@@ -111,6 +115,25 @@ function PlayState:update(dt)
         ball:update(dt)
     end
 
+    -- ! Temporary debug commands to help test the game
+    --
+    -- Add 2 more balls
+    if love.keyboard.wasPressed('b') then 
+        for i=1,2 do
+            table.insert(self.balltable, Ball(math.random(7)))
+            self.ballcounter = self.ballcounter + 1
+            self.balltable[self.ballcounter].x = self.paddle.x + (self.paddle.width / 2) - 4
+            self.balltable[self.ballcounter].y = self.paddle.y - 8
+            -- give ball random starting velocity
+            self.balltable[self.ballcounter].dx = math.random(-200, 200)
+            self.balltable[self.ballcounter].dy = math.random(-60, -80)
+        end
+    end
+    --
+    --
+    --
+
+
     --
     -- !Powerup mechanics after colliding with paddle
     -- 
@@ -131,19 +154,45 @@ function PlayState:update(dt)
                 
                 --add 2 more balls
                 for i=1,2 do
-                    table.insert(self.temp, Ball(math.random(7)))
-                    ballcounter = ballcounter + 1
-                    self.temp[ballcounter].x = self.paddle.x + (self.paddle.width / 2) - 4
-                    self.temp[ballcounter].y = self.paddle.y - 8
+                    table.insert(self.balltable, Ball(math.random(7)))
+                    self.ballcounter = self.ballcounter + 1
+                    self.balltable[self.ballcounter].x = self.paddle.x + (self.paddle.width / 2) - 4
+                    self.balltable[self.ballcounter].y = self.paddle.y - 8
                     -- give ball random starting velocity
-                    self.temp[ballcounter].dx = math.random(-200, 200)
-                    self.temp[ballcounter].dy = math.random(-60, -80)
+                    self.balltable[self.ballcounter].dx = math.random(-200, 200)
+                    self.balltable[self.ballcounter].dy = math.random(-60, -80)
                 end
             end
 
+            if power.skin == 9 then
+                print("You got 1 more ball!")
+                table.insert(self.balltable, Ball(math.random(7)))
+                self.ballcounter = self.ballcounter + 1
+                self.balltable[self.ballcounter].x = self.paddle.x + (self.paddle.width / 2) - 4
+                self.balltable[self.ballcounter].y = self.paddle.y - 8
+                -- give ball random starting velocity
+                self.balltable[self.ballcounter].dx = math.random(-200, 200)
+                self.balltable[self.ballcounter].dy = math.random(-60, -80)
+            end
+
+            -- key powerup
+            if power.skin == 10 then
+                print("You got a key!")
+
+                self.hasfoundakey = true
+
+                --Unlocking a locked brick
+                for k, brick in pairs(self.bricks) do
+                    if brick.locked then
+                        brick.locked = false
+                        brick.unlocked = true
+                        -- emit particle effects to make player notice that he unlocked it
+                        brick.psystem:emit(128)
+                    end
+                end
+            end
             table.remove(self.powers, k)
         end
-        
     end
     --
     --
@@ -151,7 +200,7 @@ function PlayState:update(dt)
 
     -- detect collision across all bricks with the ball
     for k, brick in pairs(self.bricks) do
-        for b, ball in pairs(self.temp) do
+        for b, ball in pairs(self.balltable) do
 
             -- only check collision if we're in play
             if brick.inPlay and ball:collides(brick) then
@@ -163,9 +212,9 @@ function PlayState:update(dt)
                 --! Conditions to spawn powerups
                 --
                 -- 3 balls powerup
-                if self.counterhits >= 20 and math.random(1,4) == 2 then
+                if self.counterhits >= 26 and math.random(1,4) == 2 then
                     table.insert( self.powers, Powerup(4, brick.x, brick.y, 30) )
-                    self.counterhits = self.counterhits/2
+                    self.counterhits = 0
                 end
 
                 -- hearts powerup
@@ -173,13 +222,28 @@ function PlayState:update(dt)
                     table.insert( self.powers, Powerup(3, brick.x, brick.y, 30))
                     self.counterhits = self.counterhits/2
                 end
+
+                -- key for unlocking the brick
+                if math.random(20) == 15 and not self.hasfoundakey and self.lockedcreated then
+                    table.insert( self.powers, Powerup(10, brick.x, brick.y, 30))
+                end
                 --
+                -- 1 more ball powerup
+                if self.counterhits >= 24 and math.random(1,8) == 4 then
+                    table.insert( self.powers, Powerup(9, brick.x, brick.y, 30))
+                    self.counterhits = self.counterhits/2
+                end                
                 --
                 --
 
-                -- add to score
-                self.score = self.score + (brick.tier * 200 + brick.color * 25)
-
+                -- add to score for all bricks except for locked and give more points for unlocked
+                if not brick.locked then
+                    if not brick.unlocked then
+                        self.score = self.score + (brick.tier * 200 + brick.color * 25)
+                    else
+                        self.score = self.score + 15000
+                    end
+                end
                 -- trigger the brick's hit function, which removes it from play
                 brick:hit()
 
@@ -191,7 +255,7 @@ function PlayState:update(dt)
                     self.paddle.size = math.min(4, self.paddle.size + 1)
 
                     -- multiply recover points by 2
-                    self.recoverPoints = math.min(100000, self.recoverPoints * 2)
+                    self.recoverPoints = math.min(1000000, self.recoverPoints * 2)
 
                     -- play recover sound effect
                     gSounds['recover']:play()
@@ -265,14 +329,17 @@ function PlayState:update(dt)
     end
 
     -- *if ball goes below bounds, revert to serve state and decrease health
-    for b, ball in pairs(self.temp) do
+    for b, ball in pairs(self.balltable) do
         if ball.y >= VIRTUAL_HEIGHT then
+
             -- remove the ball from the table
-            table.remove( self.temp, b)
-            -- decrease the counterof the balls
-            ballcounter = ballcounter - 1
+            table.remove( self.balltable, b)
+
+            -- decrease the counter of the balls
+            self.ballcounter = self.ballcounter - 1
+
             -- only if there are no more balls
-            if ballcounter == 0 then 
+            if self.ballcounter == 0 then 
                 self.health = self.health - 1
                 -- shrinks a paddle in size not less then 2
                 if self.paddle.size > 1 then
@@ -294,7 +361,8 @@ function PlayState:update(dt)
                         highScores = self.highScores,
                         level = self.level,
                         recoverPoints = self.recoverPoints,
-                        paddlesize = self.paddle.size
+                        paddlesize = self.paddle.size,
+                        key = self.hasfoundakey
                     })
                 end
             end
@@ -323,8 +391,8 @@ function PlayState:render()
 
     self.paddle:render()
 
-    -- !Rendering the ball
-    for b, ball in pairs(self.temp) do
+    -- ! Rendering the balls
+    for b, ball in pairs(self.balltable) do
         ball:render()
     end
 

@@ -63,6 +63,10 @@ function Brick:init(x, y)
     -- used to determine whether this brick should be rendered
     self.inPlay = true
 
+    -- values for locked brick
+    self.locked = false
+    self.unlocked = false
+
     -- particle system belonging to the brick, emitted on hit
     self.psystem = love.graphics.newParticleSystem(gTextures['particle'], 64)
 
@@ -100,30 +104,48 @@ function Brick:hit()
     )
     self.psystem:emit(64)
 
-    -- sound on hit
-    gSounds['brick-hit-2']:stop()
-    gSounds['brick-hit-2']:play()
+    if self.locked then
+        -- sound of locked brick hit
+        gSounds['locked-hit']:stop()
+        gSounds['locked-hit']:play()
+    else
+        -- sound on normal brick hit
+        gSounds['brick-hit-2']:stop()
+        gSounds['brick-hit-2']:play()
+    end
 
     -- if we're at a higher tier than the base, we need to go down a tier
     -- if we're already at the lowest color, else just go down a color
-    if self.tier > 0 then
-        if self.color == 1 then
-            self.tier = self.tier - 1
-            self.color = 5
-        else
-            self.color = self.color - 1
+    if not self.locked then
+        
+        if self.unlocked then
+            self.color = 1
+            self.tier = 0
         end
-    else
-        -- if we're in the first tier and the base color, remove brick from play
-        if self.color == 1 then
-            self.inPlay = false
+        if self.tier > 0 then
+            if self.color == 1 then
+                self.tier = self.tier - 1
+                self.color = 5
+            else
+                self.color = self.color - 1
+            end
         else
-            self.color = self.color - 1
+            -- if we're in the first tier and the base color, remove brick from play
+            if self.color == 1 then
+                self.inPlay = false
+            else
+                self.color = self.color - 1
+            end
         end
     end
 
+
     -- play a second layer sound if the brick is destroyed
-    if not self.inPlay then
+    if not self.inPlay and self.unlocked then
+    -- sound of locked brick hit
+        gSounds['locked-hit2']:stop()
+        gSounds['locked-hit2']:play()
+    elseif not self.inPlay and not self.unlocked then
         gSounds['brick-hit-1']:stop()
         gSounds['brick-hit-1']:play()
     end
@@ -135,11 +157,24 @@ end
 
 function Brick:render()
     if self.inPlay then
-        love.graphics.draw(gTextures['main'], 
-            -- multiply color by 4 (-1) to get our color offset, then add tier to that
-            -- to draw the correct tier and color brick onto the screen
-            gFrames['bricks'][1 + ((self.color - 1) * 4) + self.tier],
+        -- Check if the brick is locked
+        if self.locked then
+            love.graphics.draw(gTextures['main'], gFrames['bricks'][24],
             self.x, self.y)
+
+        elseif self.unlocked then
+            love.graphics.draw(gTextures['main'], gFrames['bricks'][21],
+            self.x, self.y)
+
+        -- if not just draw a normal block
+        else
+            love.graphics.draw(gTextures['main'], 
+                -- multiply color by 4 (-1) to get our color offset, then add tier to that
+                -- to draw the correct tier and color brick onto the screen,
+                -- ensuring that it will not get more than 21
+                gFrames['bricks'][math.min(21, 1 + ((self.color - 1) * 4) + self.tier)],
+                self.x, self.y)
+        end
     end
 end
 

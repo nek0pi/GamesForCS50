@@ -23,6 +23,8 @@ ALTERNATE = 2       -- alternate colors
 SKIP = 3            -- skip every other block
 NONE = 4            -- no blocks this row
 
+lockedcreated = false -- shows if map contains locked brick
+
 LevelMaker = Class{}
 
 --[[
@@ -46,6 +48,9 @@ function LevelMaker.createMap(level)
 
     -- highest color of the highest tier, no higher than 5
     local highestColor = math.min(5, level % 5 + 3)
+
+    -- To make sure to create only one locked brick
+    lockedcreated = false
 
     -- lay out bricks such that they touch each other and fill the space
     for y = 1, numRows do
@@ -112,6 +117,11 @@ function LevelMaker.createMap(level)
                 b.tier = solidTier
             end 
 
+            -- ! Adding locked brick
+            if lockedcreated == false and math.random(10) == 10 then
+                lockedcreated = true
+                b.locked = true
+            end
             table.insert(bricks, b)
 
             -- Lua's version of the 'continue' statement
@@ -119,8 +129,8 @@ function LevelMaker.createMap(level)
         end
     end 
 
-    -- in the event we didn't generate any bricks, try again
-    if #bricks == 0 then
+    -- in the event we didn't generate any bricks or generated 1 or 3 bricks, try again
+    if #bricks == 0 or #bricks == 1 or #bricks == 3 then
         return self.createMap(level)
     else
         return bricks

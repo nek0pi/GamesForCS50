@@ -42,7 +42,8 @@ function VictoryState:update(dt)
             score = self.score,
             highScores = self.highScores,
             recoverPoints = self.recoverPoints,
-            paddlesize = self.paddle.size
+            paddlesize = self.paddle.size,
+            key = false
         })
     end
 end
