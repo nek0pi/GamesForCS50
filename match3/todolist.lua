@@ -1,9 +1,12 @@
 --[[
-Welcome to your fourth assignment! There was a lot to learn with timers, tweens, and more in this lecture, but unfortunately, our game is still lacking in a few areas. By extending its functionality, we’ll have something even closer to famous titles such as Bejeweled and Candy Crush Saga!
+Welcome to your fourth assignment! 
+There was a lot to learn with timers, tweens, and more in this lecture, but unfortunately, 
+our game is still lacking in a few areas. By extending its functionality, 
+we’ll have something even closer to famous titles such as Bejeweled and Candy Crush Saga!
 
 Your goals this assignment:
 
-*Implement time addition on matches, such that scoring a match extends the timer by 1 second per 
+//Implement time addition on matches, such that scoring a match extends the timer by 1 second per 
 tile in a match. This one will probably be the easiest! Currently, there’s code that calculates the 
 amount of points you’ll want to award the player when it calculates any matches in PlayState:calculateMatches, so start there!
 
