@@ -17,6 +17,10 @@ step (but only slightly); right now, random colors and varieties are chosen in B
 but perhaps we could pass in the level variable from the PlayState when a Board is created (specifically in PlayState:enter), 
 and then let that influence what variety is chosen?
 
+todo change the variety of skins depending on a level +
+todo change the scores you get when matching these block
+todo make it possible to easily trace the skin of the block - working with matches
+
 *Create random shiny versions of blocks that will destroy an entire row on match, granting points for each block in the row. 
 This one will require a little more work! We’ll need to modify the Tile class most likely to hold some 
 kind of flag to let us know whether it’s shiny and then test for its presence in Board:calculateMatches!
