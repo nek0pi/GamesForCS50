@@ -47,13 +47,24 @@ gSounds = {
     ['match'] = love.audio.newSource('sounds/match.wav'),
     ['clock'] = love.audio.newSource('sounds/clock.wav'),
     ['game-over'] = love.audio.newSource('sounds/game-over.wav'),
-    ['next-level'] = love.audio.newSource('sounds/next-level.wav')
+    ['next-level'] = love.audio.newSource('sounds/next-level.wav'),
+    ['explosion'] = love.audio.newSource('sounds/explosion.wav'),
 }
 
 gTextures = {
     ['main'] = love.graphics.newImage('graphics/match3.png'),
-    ['background'] = love.graphics.newImage('graphics/background.png')
+    ['background1'] = love.graphics.newImage('graphics/background1.png'),
+    ['background2'] = love.graphics.newImage('graphics/background2.png'),
+    ['background3'] = love.graphics.newImage('graphics/background3.png'),
+    ['background4'] = love.graphics.newImage('graphics/background4.png'),
+    ['background5'] = love.graphics.newImage('graphics/background5.png'),
+    ['bomb'] = love.graphics.newImage('graphics/bomb.png')
 }
+
+--variable for main.lua background rendering
+backgroundimg = gTextures['background1']
+-- variable for cycling through the backgrounds
+backcycle = 1
 
 gFrames = {
     

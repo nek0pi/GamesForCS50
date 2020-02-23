@@ -89,6 +89,7 @@ function StartState:update(dt)
                     [self] = {transitionAlpha = 255}
                 }):finish(function()
                     gStateMachine:change('begin-game', {
+                        --!Tweeking starting level
                         level = 1
                     })
 
@@ -158,6 +159,18 @@ function StartState:drawMatch3Text(y)
         love.graphics.printf(self.letterTable[i][1], 0, VIRTUAL_HEIGHT / 2 + y,
             VIRTUAL_WIDTH + self.letterTable[i][2], 'center')
     end
+
+    -- * Nek0pi Edition
+    -- draw semi-transparent rect behind MATCH 3
+    love.graphics.setColor(255, 255, 255, 128)
+    love.graphics.rectangle('fill', VIRTUAL_WIDTH / 2 - 76, VIRTUAL_HEIGHT / 2 + y + 160, 150, 40, 6)
+
+    -- draw nekopi edition text shadows
+    love.graphics.setFont(gFonts['medium'])
+    self:drawTextShadow('Nekopi Edition!', VIRTUAL_HEIGHT / 2 + y + 170)
+    love.graphics.setColor(217, 87, 99, 256)
+    love.graphics.printf('Nekopi Edition!', 0, VIRTUAL_HEIGHT / 2 + y + 170, VIRTUAL_WIDTH, 'center')
+
 end
 
 --[[

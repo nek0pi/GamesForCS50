@@ -2,8 +2,11 @@
     GD50
     Match-3 Remake
 
-    Author: Colton Ogden
+    *Author: Colton Ogden
     cogden@cs50.harvard.edu
+
+    * Remaker: Nek0pi
+    github.com/Nek0pi
 
     Match-3 has taken several forms over the years, with its roots in games
     like Tetris in the 80s. Bejeweled, in 2001, is probably the most recognized
@@ -47,7 +50,7 @@ BACKGROUND_SCROLL_SPEED = 80
 function love.load()
     
     -- window bar title
-    love.window.setTitle('Match 3')
+    love.window.setTitle('Match 3 - Nek0pi edition')
 
     -- seed the RNG
     math.randomseed(os.time())
@@ -62,6 +65,8 @@ function love.load()
 
     -- set music to loop and start
     gSounds['music']:setLooping(true)
+    --!Temporary muted the music
+    gSounds['music']:setVolume(0)
     gSounds['music']:play()
 
     -- initialize state machine with all state-returning functions
@@ -117,8 +122,9 @@ function love.draw()
     push:start()
 
     -- scrolling background drawn behind every state
-    love.graphics.draw(gTextures['background'], backgroundX, 0)
+    love.graphics.draw(backgroundimg, backgroundX, 0)
     
     gStateMachine:render()
     push:finish()
 end
+

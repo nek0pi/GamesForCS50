@@ -30,8 +30,14 @@ end
 
 function BeginGameState:enter(def)
     
-    -- * grab level # from the def we're passed
+    -- * grab level # from the def we've passed
     self.level = def.level
+    
+    -- * cycling through the backgrounds
+    if backcycle > 5 then backcycle = 1 end
+    backgroundimg = gTextures['background'.. math.max(1, math.min(5,backcycle))]
+    backcycle = backcycle + 1
+
 
         -- * spawn a board and place it toward the right with the tiles of a right level
         self.board = Board(VIRTUAL_WIDTH - 272, 16, self.level)

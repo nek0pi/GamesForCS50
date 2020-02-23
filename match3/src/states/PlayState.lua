@@ -75,6 +75,12 @@ function PlayState:update(dt)
         love.event.quit()
     end
 
+    -- ! Debug command to give you 1000 more points
+    if love.keyboard.wasPressed('p') then
+        self.score = self.score + 1000
+    end
+
+
     -- go back to start if time runs out
     if self.timer <= 0 then
         
@@ -142,15 +148,16 @@ function PlayState:update(dt)
                 gSounds['error']:play()
                 self.highlightedTile = nil
             else
-                
                 -- swap grid positions of tiles
                 local tempX = self.highlightedTile.gridX
                 local tempY = self.highlightedTile.gridY
 
                 local newTile = self.board.tiles[y][x]
-
+                print ("It was highlighted " )
+                print(newTile)
                 self.highlightedTile.gridX = newTile.gridX
                 self.highlightedTile.gridY = newTile.gridY
+                
                 newTile.gridX = tempX
                 newTile.gridY = tempY
 
@@ -163,12 +170,41 @@ function PlayState:update(dt)
                 -- tween coordinates between the two so they swap
                 Timer.tween(0.1, {
                     [self.highlightedTile] = {x = newTile.x, y = newTile.y},
+
+
                     [newTile] = {x = self.highlightedTile.x, y = self.highlightedTile.y}
                 })
                 
                 -- once the swap is finished, we can tween falling blocks as needed
                 :finish(function()
-                    self:calculateMatches()
+                    -- if there are no matches after changing position - put tiles back
+                    if not self.board:calculateMatches() then
+                        print("No matches found")
+                        gSounds['error']:play()
+                        tempX = newTile.gridX
+                        tempY = newTile.gridY
+
+                        newTile.gridX = self.highlightedTile.gridX
+                        newTile.gridY = self.highlightedTile.gridY
+
+                        self.highlightedTile.gridX = tempX
+                        self.highlightedTile.gridY = tempY
+
+                        -- swap tiles in the tiles table
+                        self.board.tiles[self.highlightedTile.gridY][self.highlightedTile.gridX] =
+                        self.highlightedTile
+                        
+                        self.board.tiles[newTile.gridY][newTile.gridX] = newTile
+                        Timer.tween(0.1, {
+                            [self.highlightedTile] = {x = newTile.x, y = newTile.y},
+                            [newTile] = {x = self.highlightedTile.x, y = self.highlightedTile.y}
+                        })
+                        -- turn off the highlight
+                        self.highlightedTile = nil
+
+                    else
+                        self:calculateMatches()
+                    end
                 end)
             end
         end
@@ -195,14 +231,43 @@ function PlayState:calculateMatches()
 
         -- add score for each match
         for k, match in pairs(matches) do
-            self.score = self.score + #match * 50 + match.worth * 2
+            -- check variable to identify a bomb in a match
+            exploded = false
+        
+            for k, m in pairs(match) do
+                -- If one of matches was the bomb
+                if m.bomb then
+                    gSounds['explosion']:stop()
+                    gSounds['explosion']:play()
+                    exploded = true
+                    -- give player points for all 8 blocks
+                    self.score = self.score + 8 * 50
+                    -- add seconds to the timer
+                    self.timer = self.timer + 8
+                    break
+                else
+                    --* getting additional points for scoring different varieties 
+                    self.score = self.score + m.variety * 10
+                end
+            end
+            if not exploded then
+                -- if not exploded give points for number of matches
+                self.score = self.score + #match * 50
+            end
+
             -- add seconds to the timer depending on how many tiles has been matched
             self.timer = self.timer + #match
-
         end
+
+        --! Bomb mechanic
+        if exploded then
+            self.board:removerow()
+        else
+            -- remove any tiles that matched from the board, making empty spaces
+            self.board:removeMatches()
+        end
+
         
-        -- remove any tiles that matched from the board, making empty spaces
-        self.board:removeMatches()
 
         -- gets a table with tween values for tiles that should now fall
         local tilesToFall = self.board:getFallingTiles()

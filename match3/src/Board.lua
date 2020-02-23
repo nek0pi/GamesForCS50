@@ -17,8 +17,8 @@ function Board:init(x, y, level)
     self.x = x
     self.y = y
     self.matches = {}
+    self.level = level
 
-    self.worth = math.min(6, math.random(1, level))
     self:initializeTiles()
 end
 
@@ -31,9 +31,14 @@ function Board:initializeTiles()
         table.insert(self.tiles, {})
 
         for tileX = 1, 8 do
-            
-            -- create a new tile at X,Y with a random color not more than a level and variety,
-            table.insert(self.tiles[tileY], Tile(tileX, tileY, math.random(18), self.worth))
+            -- !calculate random worth of tile
+            self.worth = math.min(6, math.random(1, self.level))
+            -- create a new tile at X,Y with a random color not more than a worth and variety,
+            self.bombprob = false
+            if math.random() > 0.98 then
+                self.bombprob = true
+            end
+            table.insert(self.tiles[tileY], Tile(tileX, tileY, math.random(math.min(8, self.level + 3)), self.worth, self.bombprob))
         end
     end
 
@@ -177,6 +182,45 @@ function Board:removeMatches()
 end
 
 --[[
+    Checks if the match is horizontal or vertical and destroys
+    the needed raw / column
+]]
+function Board:removerow()
+    horiz,vert = false
+    for k, match in pairs(self.matches) do
+        -- chose number that is definetly not a cordinates
+        previoustileY = -100
+        for k, tile in pairs(match) do
+            currenttileY = tile.gridY
+            currenttileX = tile.gridX
+            -- if this tile's Y is same as previous one it's horizontal.
+            -- if it was already determined as horizontal - stop checking
+            if currenttileY == previoustileY and not horiz then
+                horiz = true
+                break
+            end
+            previoustileY = tile.gridY
+        end
+    end
+
+    if horiz then
+        print("Destroying horizontal row")
+        -- delete all tiles from a row
+        for x = 1, 8 do
+            self.tiles[currenttileY][x] = nil
+        end
+        self.matches = nil
+    else
+        print("VERTICAL ROW DEAD")
+        -- delete all tiles from a column
+        for y = 1, 8 do
+            self.tiles[y][currenttileX] = nil
+        end
+        self.matches = nil
+    end
+end
+
+--[[
     Shifts down all of the tiles that now have spaces below them, then returns a table that
     contains tweening information for these new tiles.
 ]]
@@ -240,8 +284,12 @@ function Board:getFallingTiles()
             -- if the tile is nil, we need to add a new one
             if not tile then
 
-                -- new tile with random color and variety
-                local tile = Tile(x, y, math.random(18), math.random(6))
+                -- * new tile with random color and variety and 2% chance of bomb dropping
+                self.bombprob = false
+                if math.random() > 0.98 then
+                    self.bombprob = true
+                end
+                local tile = Tile(x, y, math.random(math.min(8, self.level + 3)), self.worth, self.bombprob)
                 tile.y = -32
                 self.tiles[y][x] = tile
 
