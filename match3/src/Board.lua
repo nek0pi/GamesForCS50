@@ -20,6 +20,7 @@ function Board:init(x, y, level)
     self.level = level
 
     self:initializeTiles()
+    self:calculatePotential()
 end
 
 function Board:initializeTiles()
@@ -166,6 +167,60 @@ function Board:calculateMatches()
     -- return matches table if > 0, else just return false
     return #self.matches > 0 and self.matches or false
 end
+--[[
+    Calculates potential matches so the board always
+    has matches and is possible to be passed
+]]
+function Board:calculatePotential()
+    potmatchnum = 0
+    for y = 1, 8 do
+        print("Number of potential matches is: " .. potmatchnum)
+        if potmatchnum < 90 then
+            for x = 1, 8 do
+                -- can we go left?
+                if not (x == 1) then
+                    print("going left")
+
+                    rightTile = self.tiles[y][x]
+                    
+                    leftTile = self.tiles[y][x - 1]
+
+                    tempT = leftTile
+
+                    leftTile = rightTile
+
+                    rightTile = tempT
+                    
+                    -- swap tiles in the tiles table
+                    self.board.tiles[self.highlightedTile.gridY][self.highlightedTile.gridX] =
+                    self.highlightedTile
+                    
+                    self.board.tiles[newTile.gridY][newTile.gridX] = newTile
+                    if not self:calculateMatches() then
+                    else
+                        potmatchnum = potmatchnum + #self.matches
+                        print("Number of matches is: " .. self:calculateMatches())
+                    end
+                end
+                -- can we go right?
+                if not (x == 8) then
+                    print("going right")
+                end
+                -- can we go up?
+                if not (y == 1) then
+                    print("going up")
+                end
+                -- can we go down?
+                if not (y == 8) then
+                    print("going down")
+                end
+            end
+        else
+            break
+        end
+    end
+end
+
 
 --[[
     Remove the matches from the Board by just setting the Tile slots within

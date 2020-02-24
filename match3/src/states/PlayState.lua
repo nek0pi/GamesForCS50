@@ -153,8 +153,7 @@ function PlayState:update(dt)
                 local tempY = self.highlightedTile.gridY
 
                 local newTile = self.board.tiles[y][x]
-                print ("It was highlighted " )
-                print(newTile)
+                
                 self.highlightedTile.gridX = newTile.gridX
                 self.highlightedTile.gridY = newTile.gridY
                 
