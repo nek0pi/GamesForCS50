@@ -41,6 +41,9 @@ function BeginGameState:enter(def)
 
         -- * spawn a board and place it toward the right with the tiles of a right level
         self.board = Board(VIRTUAL_WIDTH - 272, 16, self.level)
+
+        -- * check for potential matches. Looking for 20 minimal
+        self.board:calculatePotential(20)
     --
     -- animate our white screen fade-in, then animate a drop-down with
     -- the level text

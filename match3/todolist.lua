@@ -58,7 +58,7 @@ in the Board (8 seems like a good number, though tweak to taste!) before impleme
     //shrink down used colors
     //make tiles revert if they are no matches made by the move
 
-    todo Make calculations about whether there are potential matches.
+    // Make calculations about whether there are potential matches.
 
     // Make levels gradually more difficult (include more colors, start with 3 and then add 1 more each level) + 
 
@@ -80,7 +80,7 @@ This one’s only if you’re feeling up for a bonus challenge :) Have fun!
 //Ensure Level 1 starts just with simple flat blocks (the first of each color in the sprite sheet), with later levels generating the blocks 
 //with patterns on them (like the triangle, cross, etc.). These should be worth more points, at your discretion.
 //Creat random shiny versions of blocks that will destroy an entire row on match, granting points for each block in the row.
-Only allow swapping when it results in a match. If there are no matches available to perform, reset the board.
+//Only allow swapping when it results in a match. If there are no matches available to perform, reset the board.
 (Optional) Implement matching using the mouse. (Hint: you’ll need push:toGame(x,y); 
 see the push library’s documentation here for details!
 

@@ -20,7 +20,6 @@ function Board:init(x, y, level)
     self.level = level
 
     self:initializeTiles()
-    self:calculatePotential()
 end
 
 function Board:initializeTiles()
@@ -41,6 +40,7 @@ function Board:initializeTiles()
             end
             table.insert(self.tiles[tileY], Tile(tileX, tileY, math.random(math.min(8, self.level + 3)), self.worth, self.bombprob))
         end
+
     end
 
     while self:calculateMatches() do
@@ -49,6 +49,8 @@ function Board:initializeTiles()
         -- a matchless board on start
         self:initializeTiles()
     end
+
+        
 end
 
 --[[
@@ -169,55 +171,102 @@ function Board:calculateMatches()
 end
 --[[
     Calculates potential matches so the board always
-    has matches and is possible to be passed
+    has matches and is possible to be passed. 
+    For now it's looking to have >20 matches when starting the board
+    to ensure that the game is possible to pass  
 ]]
-function Board:calculatePotential()
+function Board:calculatePotential(minnum)
+    -- counter for potential matches
     potmatchnum = 0
     for y = 1, 8 do
         print("Number of potential matches is: " .. potmatchnum)
-        if potmatchnum < 90 then
+        -- if there are more than minnum matches, we are good
+        if potmatchnum < minnum then
             for x = 1, 8 do
                 -- can we go left?
                 if not (x == 1) then
-                    print("going left")
-
+                    -- ! not using 3 tiles model (TempT) to make it more visual and easier to tweak
                     rightTile = self.tiles[y][x]
-                    
                     leftTile = self.tiles[y][x - 1]
 
-                    tempT = leftTile
-
-                    leftTile = rightTile
-
-                    rightTile = tempT
+                    -- putting the right tile in a left tile
+                    self.tiles[y][x - 1] = rightTile
+                    --putting the left tile in a right tile
+                    self.tiles[y][x] = leftTile
                     
-                    -- swap tiles in the tiles table
-                    self.board.tiles[self.highlightedTile.gridY][self.highlightedTile.gridX] =
-                    self.highlightedTile
-                    
-                    self.board.tiles[newTile.gridY][newTile.gridX] = newTile
-                    if not self:calculateMatches() then
-                    else
+                    if self:calculateMatches() then
                         potmatchnum = potmatchnum + #self.matches
-                        print("Number of matches is: " .. self:calculateMatches())
                     end
+                    --putting things back to normal
+                    self.tiles[y][x - 1] = leftTile
+                    self.tiles[y][x] = rightTile
                 end
                 -- can we go right?
                 if not (x == 8) then
-                    print("going right")
+
+                    rightTile = self.tiles[y][x + 1]
+                    leftTile = self.tiles[y][x]
+
+                    -- putting the left tile in a right tile
+                    self.tiles[y][x + 1] = leftTile
+                    --putting the right tile in a left tile
+                    self.tiles[y][x] = rightTile
+                    
+                    if self:calculateMatches() then
+                        potmatchnum = potmatchnum + #self.matches
+                    end
+                    --putting things back to normal
+                    self.tiles[y][x + 1] = rightTile
+                    self.tiles[y][x] = leftTile
                 end
                 -- can we go up?
                 if not (y == 1) then
-                    print("going up")
+                    
+                    upperTile = self.tiles[y - 1][x]
+                    bottomTile = self.tiles[y][x]
+
+                    -- putting the bottom to an upper
+                    self.tiles[y - 1][x] = bottomTile
+                    --putting the upper to a bottom
+                    self.tiles[y][x] = upperTile
+                    
+                    if self:calculateMatches() then
+                        potmatchnum = potmatchnum + #self.matches
+                    end
+                    -- putting things back to normal
+                    self.tiles[y - 1][x] = upperTile
+                    self.tiles[y][x] = bottomTile
                 end
                 -- can we go down?
                 if not (y == 8) then
-                    print("going down")
+
+                    upperTile = self.tiles[y][x]
+                    bottomTile = self.tiles[y + 1][x]
+
+                    -- putting the bottom to an upper
+                    self.tiles[y][x] = bottomTile
+                    --putting the upper to a bottom
+                    self.tiles[y + 1][x] = upperTile
+                    
+                    if self:calculateMatches() then
+                        potmatchnum = potmatchnum + #self.matches
+                    end
+                    -- putting things back to normal
+                    self.tiles[y][x] = upperTile
+                    self.tiles[y + 1][x] = bottomTile
+
                 end
             end
         else
             break
         end
+    end
+    
+    -- if after all there are no more than minnum potential matches reinitialize Tiles
+    if potmatchnum < minnum then
+        print("not enough matches were found, reinitializing")
+        self:initializeTiles()
+        self:calculatePotential(20)
     end
 end
 

@@ -279,11 +279,21 @@ function PlayState:calculateMatches()
             -- as a result of falling blocks once new blocks have finished falling
             self:calculateMatches()
         end)
+        
     
     -- if no matches, we can continue playing
     else
         self.canInput = true
     end
+
+    -- ! check that board still has a potential matches left.
+    -- here it checks for minimal value of matches which is 3 
+
+    local calcpot = self.board:calculatePotential(3)
+    Timer.tween(0.25, calcpot):finish(function()
+        self.board:calculatePotential(3)
+    end)
+   
 end
 
 function PlayState:render()
