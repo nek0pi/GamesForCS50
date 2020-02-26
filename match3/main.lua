@@ -103,6 +103,24 @@ function love.keyboard.wasPressed(key)
     end
 end
 
+-- ! MOUSE RELATED
+--
+love.mouse.keysPressed = {}
+
+function love.mousepressed(x, y, button)
+    love.mouse.keysPressed[button] = true
+end
+
+function love.mouse.wasPressed(button)
+    if love.mouse.keysPressed[button] then
+        return true
+    else
+        return false
+    end
+end
+--
+--
+
 function love.update(dt)
     
     -- scroll background, used across all states
@@ -116,6 +134,8 @@ function love.update(dt)
     gStateMachine:update(dt)
 
     love.keyboard.keysPressed = {}
+    --! MOUSE RELATED
+    love.mouse.keysPressed = {}
 end
 
 function love.draw()

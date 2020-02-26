@@ -110,7 +110,6 @@ function PlayState:update(dt)
             score = self.score
         })
     end
-
     if self.canInput then
         -- move cursor around based on bounds of grid, playing sounds
         if love.keyboard.wasPressed('up') then
@@ -127,7 +126,33 @@ function PlayState:update(dt)
             gSounds['select']:play()
         end
 
-        -- if we've pressed enter, to select or deselect a tile...
+        -- ! Mouse controls
+        if love.mouse.wasPressed(1) then
+            print("PRESSED LEFT BUTTON FUCK YEAH")
+            print(push:toGame(love.mouse.getX(), love.mouse.getY()))
+            print(push:toGame(self.board.tiles[1][1].gridX, self.board.tiles[1][1].gridY))
+            
+            for y = 1,8 do
+                for x = 1, 8 do
+                    -- print(self.board.tiles[y][x].x)
+                    if love.mouse.getX() >= self.board.tiles[y][x].x and love.mouse.getX() <= self.board.tiles[y][x].x + 32 
+                    and love.mouse.getY() >= self.board.tiles[y][x].y and love.mouse.getY() <= self.board.tiles[y][x].y - 32 then
+                        -- the button was clicked!
+                        print("mouse was clicked")
+                    end
+
+                    --[[
+                    if mouseTilepressed(self.board.tiles[y][x].gridX, self.board.tiles[y][x].gridY, 32, 32, love.mouse.getY(), love.mouse.getX()) then
+                        print(self.board.tiles[y][x].gridX, self.board.tiles[y][x].gridY)
+                        print("tile X now is: " ..self.board.tiles[y][x].gridX)
+                        print("tile Y now is: " ..self.board.tiles[y][x].gridY)
+                    end
+                    ]]
+                end
+            end
+
+        end
+
         if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
             
             -- if same tile as currently highlighted, deselect
@@ -212,6 +237,20 @@ function PlayState:update(dt)
     Timer.update(dt)
 end
 
+
+-- !MOUSE STUFF
+-- function checks if mouse was pressed in the area of ts size around tx ty with mouse cords mx my 
+function mouseTilepressed(tx, ty, tile_width, tile_height, y, x)
+    if x >= tx and x <= tx + tile_width and y >= ty and y <= ty + tile_height then
+        -- the button was clicked!
+        print("mouse was clicked")
+        return true
+    else
+        return false
+    end
+end
+
+
 --[[
     Calculates whether any matches were found on the board and tweens the needed
     tiles to their new destinations if so. Also removes tiles from the board that
@@ -288,11 +327,7 @@ function PlayState:calculateMatches()
 
     -- ! check that board still has a potential matches left.
     -- here it checks for minimal value of matches which is 3 
-
-    local calcpot = self.board:calculatePotential(3)
-    Timer.tween(0.25, calcpot):finish(function()
-        self.board:calculatePotential(3)
-    end)
+    self.board:calculatePotential(3)
    
 end
 
