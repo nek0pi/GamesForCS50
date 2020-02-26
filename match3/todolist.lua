@@ -36,8 +36,10 @@ kind of flag to let us know whether it’s shiny and then test for its presence 
     //todo draw a bomb on a special tile
     //todo make a different sound when you match with a special tile
     //todo make the whole row be added to match when this speacial tile is matched
-    todo add a particle effects when the whole row is going out. 
+    ?add a particle effects when the whole row is going out. 
+    Nah
     ?Make it a laser? Make it a dissapear? use the timer to make it dissapear w/ cool particle effects?
+    Nah, i'm too lazy
     //todo make it spawn only with a rare possibility
 
 
@@ -46,8 +48,8 @@ There are multiple ways to try and tackle this problem; choose whatever way you 
 probably just to try and test for Board:calculateMatches after a swap and just revert back if there is no match! 
 
 
-todo ------>
-The harder part is ensuring that potential matches exist;  
+todo ------> DONE
+//The harder part is ensuring that potential matches exist;  
 for this, the simplest way is most likely to pretend swap everything left, 
 right, up, and down, using essentially the same reverting code as just above! 
 However, be mindful that the current implementation uses all of the blocks in the sprite sheet, 
@@ -64,7 +66,7 @@ in the Board (8 seems like a good number, though tweak to taste!) before impleme
 
 
 
-*(Optional) Implement matching using the mouse. (Hint: you’ll need push:toGame(x,y); 
+//(Optional) Implement matching using the mouse. (Hint: you’ll need push:toGame(x,y); 
 see the push library’s documentation here for details! This one’s fairly self-explanatory; 
 feel free to implement click-based, drag-based, or both for your application! 
 This one’s only if you’re feeling up for a bonus challenge :) Have fun!
@@ -81,7 +83,7 @@ This one’s only if you’re feeling up for a bonus challenge :) Have fun!
 //with patterns on them (like the triangle, cross, etc.). These should be worth more points, at your discretion.
 //Creat random shiny versions of blocks that will destroy an entire row on match, granting points for each block in the row.
 //Only allow swapping when it results in a match. If there are no matches available to perform, reset the board.
-(Optional) Implement matching using the mouse. (Hint: you’ll need push:toGame(x,y); 
+//(Optional) Implement matching using the mouse. (Hint: you’ll need push:toGame(x,y); 
 see the push library’s documentation here for details!
 
 ]]
