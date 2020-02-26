@@ -135,9 +135,7 @@ function PlayState:update(dt)
                         and push:toGame(love.mouse.getX(), 0) <= 256 + 16 + 32 * x
                         and push:toGame(love.mouse.getY(), 0) >= 32 - 16 + 32 * y 
                         and push:toGame(love.mouse.getY(), 0) <= 32 + 16 + 32 * y then
-                            -- the button was clicked!
-                            print("mouse was clicked at this tile: ")
-                            print(self.board.tiles[y + 1][x + 1].gridX, self.board.tiles[y + 1][x + 1].gridY)
+                            -- the button was clicked! Select it
                             self.boardHighlightY = y 
                             self.boardHighlightX = x 
                             gSounds['select']:play()
@@ -196,7 +194,6 @@ function PlayState:update(dt)
                 :finish(function()
                     -- if there are no matches after changing position - put tiles back
                     if not self.board:calculateMatches() then
-                        print("No matches found")
                         gSounds['error']:play()
                         tempX = newTile.gridX
                         tempY = newTile.gridY

@@ -179,7 +179,6 @@ function Board:calculatePotential(minnum)
     -- counter for potential matches
     potmatchnum = 0
     for y = 1, 8 do
-        print("Number of potential matches is: " .. potmatchnum)
         -- if there are more than minnum matches, we are good
         if potmatchnum < minnum then
             for x = 1, 8 do
@@ -264,7 +263,6 @@ function Board:calculatePotential(minnum)
     
     -- if after all there are no more than minnum potential matches reinitialize Tiles
     if potmatchnum < minnum then
-        print("not enough matches were found, reinitializing")
         self:initializeTiles()
         self:calculatePotential(20)
     end
@@ -308,14 +306,12 @@ function Board:removerow()
     end
 
     if horiz then
-        print("Destroying horizontal row")
         -- delete all tiles from a row
         for x = 1, 8 do
             self.tiles[currenttileY][x] = nil
         end
         self.matches = nil
     else
-        print("VERTICAL ROW DEAD")
         -- delete all tiles from a column
         for y = 1, 8 do
             self.tiles[y][currenttileX] = nil
