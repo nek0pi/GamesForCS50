@@ -2,8 +2,11 @@
     GD50
     Super Mario Bros. Remake
 
-    Author: Colton Ogden
+    * Author: Colton Ogden
     cogden@cs50.harvard.edu
+
+    * Remaker: Nek0pi
+    github.com/nek0pi
     
     A classic platformer in the style of Super Mario Bros., using a free
     art pack. Super Mario Bros. was instrumental in the resurgence of video
@@ -24,7 +27,7 @@ require 'src/Dependencies'
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.graphics.setFont(gFonts['medium'])
-    love.window.setTitle('Super 50 Bros.')
+    love.window.setTitle('Super 50 Bros - Nek0pi edition')
 
     math.randomseed(os.time())
     

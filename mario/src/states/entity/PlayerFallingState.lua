@@ -77,7 +77,8 @@ function PlayerFallingState:update(dt)
         end
     end
 
-    -- check if we've collided with any entities and kill them if so
+    -- check if we've collided with any entities and kill them if so. 
+    -- So if we falling we always 
     for k, entity in pairs(self.player.level.entities) do
         if entity:collides(self.player) then
             gSounds['kill']:play()

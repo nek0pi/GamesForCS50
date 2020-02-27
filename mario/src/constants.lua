@@ -29,7 +29,7 @@ SCREEN_TILE_HEIGHT = VIRTUAL_HEIGHT / TILE_SIZE
 CAMERA_SPEED = 100
 
 -- speed of scrolling background
-BACKGROUND_SCROLL_SPEED = 10
+BACKGROUND_SCROLL_SPEED = 100
 
 -- number of tiles in each tile set
 TILE_SET_WIDTH = 5

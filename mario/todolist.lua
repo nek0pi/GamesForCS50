@@ -17,6 +17,10 @@ track of the current level and persists the player’s score for this to work pr
 
 todo add a sprint in the game - hold a shift to change dx
 
+! Bug when monsters rotate / flickering too fast
+! Flickering background / movements are very tearring?
+! MC doesn't always fall in gaps and walk through easily. Collision detection?
+
 It’s-a Key!
 Welcome to your fifth assignment! So far, we have a fair foundation for a platforming game present in the distro,
 
