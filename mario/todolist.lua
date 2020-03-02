@@ -2,7 +2,11 @@
 
 Objectives
 * Read and understand all of the Super Mario Bros. source code from Lecture 4.
-* Program it such that when the player is dropped into the level, they’re always done so above solid ground.
+
+//  Program it such that when the player is dropped into the level, they’re always done so above solid ground.
+
+? Now player always spawns above 2 blocks.
+
 * In LevelMaker.lua, generate a random-colored key and lock block (taken from keys_and_locks.png in 
     the graphics folder of the distro). The key should unlock the block when the player collides with it, 
     triggering the block to disappear.
@@ -15,11 +19,19 @@ of it again (this can all be done via just reloading PlayState), and make it a l
 than it was before. You’ll need to introduce params to the PlayState:enter function that keeps 
 track of the current level and persists the player’s score for this to work properly.
 
-todo add a sprint in the game - hold a shift to change dx
+// add a sprint in the game - hold a shift to change dx
+todo randomize character depending on some conditions. Next level next char?
 
-! Bug when monsters rotate / flickering too fast
+
+! BUGS: 
+// Bug when monsters rotate / flickering too fast - Fixed
+? Fixed by tweaking spawn pattern (Only spawn when there are 2 blocks available)
+
 ! Flickering background / movements are very tearring?
 ! MC doesn't always fall in gaps and walk through easily. Collision detection?
+
+// Snail flickering (goes right/left when MC is above the snail) - Fixed
+? Fixed by making snail stop when 1-2 pixels in range of MC
 
 It’s-a Key!
 Welcome to your fifth assignment! So far, we have a fair foundation for a platforming game present in the distro,

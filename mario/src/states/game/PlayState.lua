@@ -97,7 +97,7 @@ end
     Adds a series of enemies to the level randomly.
 ]]
 function PlayState:spawnEnemies()
-    -- spawn snails in the level
+    -- * spawn snails in the level
     for x = 1, self.tileMap.width do
 
         -- flag for whether there's ground on this column of the level
@@ -105,31 +105,37 @@ function PlayState:spawnEnemies()
 
         for y = 1, self.tileMap.height do
             if not groundFound then
-                if self.tileMap.tiles[y][x].id == TILE_ID_GROUND then
-                    groundFound = true
+                -- checks if we on the first or the one before last tile
+                if x > 1 and x < self.tileMap.width then
+                    -- if there is one more ground tile on the right or on the left spawn enemie
+                    if self.tileMap.tiles[y][x].id == TILE_ID_GROUND and (self.tileMap.tiles[y][x + 1].id == TILE_ID_GROUND 
+                    or self.tileMap.tiles[y][x - 1].id == TILE_ID_GROUND) then
 
-                    -- random chance, 1 in 20
-                    if math.random(20) == 1 then
-                        
-                        -- instantiate snail, declaring in advance so we can pass it into state machine
-                        local snail
-                        snail = Snail {
-                            texture = 'creatures',
-                            x = (x - 1) * TILE_SIZE,
-                            y = (y - 2) * TILE_SIZE + 2,
-                            width = 16,
-                            height = 16,
-                            stateMachine = StateMachine {
-                                ['idle'] = function() return SnailIdleState(self.tileMap, self.player, snail) end,
-                                ['moving'] = function() return SnailMovingState(self.tileMap, self.player, snail) end,
-                                ['chasing'] = function() return SnailChasingState(self.tileMap, self.player, snail) end
+                        groundFound = true
+
+                        -- random chance, 1 in 20
+                        if math.random(20) == 1 then
+                            
+                            -- instantiate snail, declaring in advance so we can pass it into state machine
+                            local snail
+                            snail = Snail {
+                                texture = 'creatures',
+                                x = (x - 1) * TILE_SIZE,
+                                y = (y - 2) * TILE_SIZE + 2,
+                                width = 16,
+                                height = 16,
+                                stateMachine = StateMachine {
+                                    ['idle'] = function() return SnailIdleState(self.tileMap, self.player, snail) end,
+                                    ['moving'] = function() return SnailMovingState(self.tileMap, self.player, snail) end,
+                                    ['chasing'] = function() return SnailChasingState(self.tileMap, self.player, snail) end
+                                }
                             }
-                        }
-                        snail:changeState('idle', {
-                            wait = math.random(5)
-                        })
+                            snail:changeState('idle', {
+                                wait = math.random(5)
+                            })
 
-                        table.insert(self.level.entities, snail)
+                            table.insert(self.level.entities, snail)
+                        end
                     end
                 end
             end

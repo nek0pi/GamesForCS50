@@ -42,10 +42,18 @@ function PlayerWalkingState:update(dt)
             self.player.x = self.player.x - PLAYER_WALK_SPEED * dt
             self.player.direction = 'left'
             self.player:checkLeftCollisions(dt)
+
         elseif love.keyboard.isDown('right') then
             self.player.x = self.player.x + PLAYER_WALK_SPEED * dt
             self.player.direction = 'right'
             self.player:checkRightCollisions(dt)
+        end
+        -- * Sprint
+        if love.keyboard.isDown('lshift') then
+            print('Shift is pressed')
+            PLAYER_WALK_SPEED = 120
+        else
+            PLAYER_WALK_SPEED = 60
         end
     end
 

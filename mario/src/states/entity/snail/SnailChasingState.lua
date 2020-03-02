@@ -32,14 +32,17 @@ function SnailChasingState:update(dt)
         self.snail.direction = 'left'
         self.snail.x = self.snail.x - SNAIL_MOVE_SPEED * dt
 
-        -- stop the snail if there's a missing tile on the floor to the left or a solid tile directly left
+        -- * stop the snail if there's a missing tile on the floor to the left or a solid tile directly left
         local tileLeft = self.tilemap:pointToTile(self.snail.x, self.snail.y)
         local tileBottomLeft = self.tilemap:pointToTile(self.snail.x, self.snail.y + self.snail.height)
 
         if (tileLeft and tileBottomLeft) and (tileLeft:collidable() or not tileBottomLeft:collidable()) then
             self.snail.x = self.snail.x + SNAIL_MOVE_SPEED * dt
         end
-    else
+        -- * If in range of player stop
+        elseif self.player.x - 2 < self.snail.x and self.player.x + 2 > self.snail.x then
+            self.snail.x = self.snail.x
+        else
         self.snail.direction = 'right'
         self.snail.x = self.snail.x + SNAIL_MOVE_SPEED * dt
 
