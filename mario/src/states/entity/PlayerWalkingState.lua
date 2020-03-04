@@ -50,7 +50,6 @@ function PlayerWalkingState:update(dt)
         end
         -- * Sprint
         if love.keyboard.isDown('lshift') then
-            print('Shift is pressed')
             PLAYER_WALK_SPEED = 120
         else
             PLAYER_WALK_SPEED = 60

@@ -11,17 +11,37 @@ Objectives
     the graphics folder of the distro). The key should unlock the block when the player collides with it, 
     triggering the block to disappear.
     Once the lock has disappeared, trigger a goal post to spawn at the end of the level. 
-    Goal posts can be found in flags.png; feel free to use whichever one you’d like! 
+   Goal posts can be  found in flags.png; feel free to use whichever one you’d like! 
+
+   / create a once in a map spawned locked block 
+   / make a chance to get a key out of any block
+   / maintain the colors of keys and locked blocks
+   / when character has picked up a key show it on the right upper corner next to scores
+   todo make keys spawn a little later in the map (not on the very beginning)
+   / make locked blocks despawn after touching it with a key acquired
+   todo make locked blocks trigger flag and pole spawn
+   
+   todo make a goal post spawn
+   todo separate the pole and a flag
+   todo add animation for the flag
+
 * Note that the flag and the pole are separated, so you’ll have to spawn a GameObject for 
     each segment of the flag and one for the flag itself.
+
+
 * When the player touches this goal post, we should regenerate the level, spawn the player at the beginning 
 of it again (this can all be done via just reloading PlayState), and make it a little longer 
 than it was before. You’ll need to introduce params to the PlayState:enter function that keeps 
 track of the current level and persists the player’s score for this to work properly.
 
+
+! Make the game better features:
 // add a sprint in the game - hold a shift to change dx
 todo randomize character depending on some conditions. Next level next char?
 
+todo Make maps wider.
+
+todo make gems give more/less coins depending on a color of a gem
 
 ! BUGS: 
 // Bug when monsters rotate / flickering too fast - Fixed
@@ -29,6 +49,10 @@ todo randomize character depending on some conditions. Next level next char?
 
 ! Flickering background / movements are very tearring?
 ! MC doesn't always fall in gaps and walk through easily. Collision detection?
+
+! Snails are spawning between two hills and going to left/right very fast
+
+! Blocks sometimes spawn between two hills and are unaccessible
 
 // Snail flickering (goes right/left when MC is above the snail) - Fixed
 ? Fixed by making snail stop when 1-2 pixels in range of MC
@@ -38,12 +62,13 @@ Welcome to your fifth assignment! So far, we have a fair foundation for a platfo
 
 !Your goals this assignment:
 
-Program it such that when the player is dropped into the level, 
+//Program it such that when the player is dropped into the level, 
 they’re always done so above solid ground. Just like we generate the level 
 column by column (as can be seen in LevelMaker.lua), we can check the game’s map 
 column by column and simply ensure that the player isn’t placed above a column that just spawned a 
 chasm by looking at all of the tiles along the Y-axis, going from left to right, 
 until we’ve come across a column where we encounter a solid tile (as by checking whether the id is equal to TILE_ID_GROUND).
+
 In LevelMaker.lua, generate a random-colored key and lock block 
 (taken from keys_and_locks.png in the graphics folder of the distro). 
 The key should unlock the block when the player collides with it, triggering the block to disappear. 
@@ -55,6 +80,7 @@ since otherwise you’ll have to iterate over all of the blocks you’ve already
 throughout the level and compare their positions with that of where you’d potentially like to generate a key or lock. 
 See how the code for spawning gems works (particularly with the onConsume callback) for how you might implement picking up the key, 
 and see the code for spawning blocks and the onCollide function for how you might implement the key blocks!
+    
 Once the lock has disappeared, trigger a goal post to spawn at the end of the level. Goal posts can be found in flags.png; 
 feel free to use whichever one you’d like! Note that the flag and the pole are separated, so you’ll have to spawn a 
 GameObject for each segment of the flag and one for the flag itself. This is code we can likely add to the onCollide 

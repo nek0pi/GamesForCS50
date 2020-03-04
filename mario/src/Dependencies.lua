@@ -62,7 +62,8 @@ gSounds = {
     ['pickup'] = love.audio.newSource('sounds/pickup.wav'),
     ['empty-block'] = love.audio.newSource('sounds/empty-block.wav'),
     ['kill'] = love.audio.newSource('sounds/kill.wav'),
-    ['kill2'] = love.audio.newSource('sounds/kill2.wav')
+    ['kill2'] = love.audio.newSource('sounds/kill2.wav'),
+    ['unlock'] = love.audio.newSource('sounds/unlock.wav'),
 }
 
 gTextures = {
@@ -73,7 +74,9 @@ gTextures = {
     ['gems'] = love.graphics.newImage('graphics/gems.png'),
     ['backgrounds'] = love.graphics.newImage('graphics/backgrounds.png'),
     ['green-alien'] = love.graphics.newImage('graphics/green_alien.png'),
-    ['creatures'] = love.graphics.newImage('graphics/creatures.png')
+    ['creatures'] = love.graphics.newImage('graphics/creatures.png'),
+    ['locksandkeys'] = love.graphics.newImage('graphics/keys_and_locks.png'),
+    ['flags'] = love.graphics.newImage('graphics/flags.png'),
 }
 
 gFrames = {
@@ -86,7 +89,10 @@ gFrames = {
     ['gems'] = GenerateQuads(gTextures['gems'], 16, 16),
     ['backgrounds'] = GenerateQuads(gTextures['backgrounds'], 256, 128),
     ['green-alien'] = GenerateQuads(gTextures['green-alien'], 16, 20),
-    ['creatures'] = GenerateQuads(gTextures['creatures'], 16, 16)
+    ['creatures'] = GenerateQuads(gTextures['creatures'], 16, 16),
+    ['locksandkeys'] = GenerateQuads(gTextures['locksandkeys'], 16, 16),
+    ['flags'] = GenerateQuads(gTextures['flags'], 16, 16),
+
 }
 
 -- these need to be added after gFrames is initialized because they refer to gFrames from within

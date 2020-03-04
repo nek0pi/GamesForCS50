@@ -32,6 +32,8 @@ function PlayState:init()
         level = self.level
     })
 
+    self.transitionAlpha = 255
+
     self:spawnEnemies()
 
     self.player:changeState('falling')
@@ -80,6 +82,22 @@ function PlayState:render()
     love.graphics.print(tostring(self.player.score), 5, 5)
     love.graphics.setColor(255, 255, 255, 255)
     love.graphics.print(tostring(self.player.score), 4, 4)
+
+    -- render key if there is a key picked up
+    if keypicked then 
+        love.graphics.draw(gTextures['locksandkeys'], gFrames['locksandkeys'][lockcolor],
+         VIRTUAL_WIDTH - 20, 5)
+        love.graphics.setFont(gFonts['small'])
+
+        -- Make it dissapear
+        Timer.tween(1, {
+            [self] = {transitionAlpha = 0}
+        })
+        love.graphics.setColor(255, 255, 255, self.transitionAlpha)
+        love.graphics.print("You've got a key!", VIRTUAL_WIDTH/2 - 32, 17)
+    end
+
+
 end
 
 function PlayState:updateCamera()

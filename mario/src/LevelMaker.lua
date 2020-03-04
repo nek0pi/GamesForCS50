@@ -22,6 +22,13 @@ function LevelMaker.generate(width, height)
     local tileset = math.random(20)
     local topperset = math.random(20)
 
+    --  * keys and locked blocks vars
+    hasbblock = false
+    haskeyspawned = false
+    -- Color of a locked block and a key
+    lockcolor = math.random(1, 4)
+    keypicked = false
+
     -- insert blank tables into tiles for later access
     for x = 1, height do
         table.insert(tiles, {})
@@ -118,7 +125,7 @@ function LevelMaker.generate(width, height)
                             if not obj.hit then
 
                                 -- chance to spawn gem, not guaranteed
-                                if math.random(5) == 1 then
+                                if math.random(3) == 1 then
 
                                     -- maintain reference so we can set it to nil
                                     local gem = GameObject {
@@ -135,7 +142,7 @@ function LevelMaker.generate(width, height)
                                         -- gem has its own function to add to the player's score
                                         onConsume = function(player, object)
                                             gSounds['pickup']:play()
-                                            player.score = player.score + 100
+                                                player.score = player.score + 100
                                         end
                                     }
                                     
@@ -146,6 +153,38 @@ function LevelMaker.generate(width, height)
                                     gSounds['powerup-reveal']:play()
 
                                     table.insert(objects, gem)
+
+                                -- ! Spawn a key for locked block
+                                elseif not haskeyspawned then
+                                    haskeyspawned = true
+                                    -- maintain reference so we can set it to nil
+                                    local key = GameObject {
+                                        texture = 'locksandkeys',
+                                        x = (x - 1) * TILE_SIZE,
+                                        y = (blockHeight - 1) * TILE_SIZE - 4,
+                                        width = 16,
+                                        height = 16,
+                                        -- Till 4th thing in a picture (key color)
+                                        frame = lockcolor,
+                                        collidable = true,
+                                        consumable = true,
+                                        solid = false,
+
+                                        -- gem has its own function to add to the player's score
+                                        onConsume = function(player, object)
+                                            gSounds['pickup']:play()
+                                            player.score = player.score + 100
+                                            keypicked = true
+                                        end
+                                    }
+                                    
+                                    -- make the gem move up from the block and play a sound
+                                    Timer.tween(0.1, {
+                                        [key] = {y = (blockHeight - 2) * TILE_SIZE}
+                                    })
+                                    gSounds['powerup-reveal']:play()
+
+                                    table.insert(objects, key)
                                 end
 
                                 obj.hit = true
@@ -155,7 +194,56 @@ function LevelMaker.generate(width, height)
                         end
                     }
                 )
+                --! Chance to spawn locked block
+            elseif math.random(10) == 1 and not hasbblock then
+                -- Flag that identifies that block has spawned
+                hasbblock = true
+
+                table.insert(objects,
+
+                -- Blocked key
+                GameObject {
+                    texture = 'locksandkeys',
+                    x = (x - 1) * TILE_SIZE,
+                    y = (blockHeight - 1) * TILE_SIZE,
+                    width = 16,
+                    height = 16,
+
+                    -- make it a random variant of color
+                    frame = lockcolor + 4,
+                    collidable = true,
+                    hit = false,
+                    solid = true,
+
+                    -- collision function takes itself
+                    onCollide = function(obj)
+                        -- ! If player has a key and collided with the locked block
+                        if keypicked then
+                            -- remove all locked blocks
+                            for k, obj in pairs(objects) do
+                                if obj.texture ==
+                                 'locksandkeys' then
+                                    table.remove( objects, k )
+                                end
+                            -- remove the key from player 
+                            keypicked = false
+                            gSounds['unlock']:play()
+                                
+                            -- ! Spawn an poll with a flag on top of it.
+                            print('the poll has spawned')
+                            end
+                            
+                            
+
+                        end
+                        gSounds['empty-block']:play()
+                    end
+                }
+            )
+
             end
+  
+            
         end
     end
 
