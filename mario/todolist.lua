@@ -17,15 +17,18 @@ Objectives
    / make a chance to get a key out of any block
    / maintain the colors of keys and locked blocks
    / when character has picked up a key show it on the right upper corner next to scores
-   todo make keys spawn a little later in the map (not on the very beginning)
+   / make keys spawn a little later in the map (not on the very beginning) x > num
    / make locked blocks despawn after touching it with a key acquired
-   todo make locked blocks trigger flag and pole spawn
-   
-   todo make a goal post spawn
-   todo separate the pole and a flag
-   todo add animation for the flag
+   / make locked blocks trigger flag and pole spawn
+   / make a pole spawn at the end of the map  
+   ? if x > width / 2 
+   todo ensure that pole is spawning on a ground
+   / make a goal post spawn
+   / it into separate function to make it more optimized
+   / separate the pole and a flag
+   / add animation for the flag
 
-* Note that the flag and the pole are separated, so you’ll have to spawn a GameObject for 
+/ Note that the flag and the pole are separated, so you’ll have to spawn a GameObject for 
     each segment of the flag and one for the flag itself.
 
 
@@ -34,26 +37,30 @@ of it again (this can all be done via just reloading PlayState), and make it a l
 than it was before. You’ll need to introduce params to the PlayState:enter function that keeps 
 track of the current level and persists the player’s score for this to work properly.
 
+todo when player touches in any way the pole inisialize PlayState again
+todo after initiazing playstate again the level should get wider 
+
 
 ! Make the game better features:
 // add a sprint in the game - hold a shift to change dx
 todo randomize character depending on some conditions. Next level next char?
-
-todo Make maps wider.
 
 todo make gems give more/less coins depending on a color of a gem
 
 ! BUGS: 
 // Bug when monsters rotate / flickering too fast - Fixed
 ? Fixed by tweaking spawn pattern (Only spawn when there are 2 blocks available)
-
-! Flickering background / movements are very tearring?
-! MC doesn't always fall in gaps and walk through easily. Collision detection?
-
 ! Snails are spawning between two hills and going to left/right very fast
 
 ! Blocks sometimes spawn between two hills and are unaccessible
 
+! Flickering background / movements are very tearring?
+! MC doesn't always fall in gaps and walk through easily. Collision detection?
+
+
+
+
+* Hill = blockHeight = 2
 // Snail flickering (goes right/left when MC is above the snail) - Fixed
 ? Fixed by making snail stop when 1-2 pixels in range of MC
 

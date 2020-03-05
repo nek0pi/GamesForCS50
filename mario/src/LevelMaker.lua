@@ -101,7 +101,7 @@ function LevelMaker.generate(width, height)
             end
 
             -- chance to spawn a block
-            if math.random(10) == 1 then
+            if math.random(8) == 1 then
                 table.insert(objects,
 
                     -- jump block
@@ -155,7 +155,8 @@ function LevelMaker.generate(width, height)
                                     table.insert(objects, gem)
 
                                 -- ! Spawn a key for locked block
-                                elseif not haskeyspawned then
+                                -- do it after a half of a map to make key search a little more interesting
+                                elseif (not haskeyspawned) and (x >= width / 2) then
                                     haskeyspawned = true
                                     -- maintain reference so we can set it to nil
                                     local key = GameObject {
@@ -228,12 +229,42 @@ function LevelMaker.generate(width, height)
                             -- remove the key from player 
                             keypicked = false
                             gSounds['unlock']:play()
+                            --
+                            --
+                            if not polehasspawned then
+                                -- ! Spawn a poll with a flag.
+                                if tiles[(blockHeight + 2)][width - 10].id == TILE_ID_GROUND then
+                                    print("touching the ground")
+                                end
+                                print('the poll has spawned')
+                                polehasspawned = true
+                                local polcol = math.random(6)
+                                table.insert(objects,spawnGOPole('flags', (width - 10) * TILE_SIZE, 
+                                (blockHeight - 1) * TILE_SIZE, 
+                                polcol, nil))
+                                table.insert(objects,spawnGOPole('flags', (width - 10) * TILE_SIZE, 
+                                (blockHeight - 0) * TILE_SIZE, 
+                                polcol + 9, nil))
+                                table.insert(objects,spawnGOPole('flags', (width - 10) * TILE_SIZE, 
+                                (blockHeight + 1) * TILE_SIZE, 
+                                polcol + 9 * 2, nil))
+
+                                -- ! Spawn the flag
+                                flagcol = math.random(3)
+
+                                table.insert(objects,
+                                spawnGOPole('flags', (width - 9.5) * TILE_SIZE,
+                                (blockHeight - 1) * TILE_SIZE,
+                                7 + 9 *flagcol, Animation {
+                                    frames = {7 + 9 *flagcol +1 , 7 + 9 *flagcol},
+                                    interval = 0.3,
+                                }))
                                 
-                            -- ! Spawn an poll with a flag on top of it.
-                            print('the poll has spawned')
+                        end
+                            --
+                            --
+
                             end
-                            
-                            
 
                         end
                         gSounds['empty-block']:play()
@@ -246,6 +277,29 @@ function LevelMaker.generate(width, height)
             
         end
     end
+    -- Function for spawning the pole parts
+    function spawnGOPole(textr, xc, yc, fr, ani)
+            obj = GameObject {
+                texture = textr,
+                x = xc,
+                y = yc,
+                width = 16,
+                height = 16,
+                -- make it a random variant of color
+                frame = fr,
+                collidable = true,
+                hit = false,
+                solid = true,
+                animation = ani,
+                -- collision function takes itself
+                onCollide = function(obj)
+                    print('Ye have collided with the pole')
+                end 
+            }
+        
+        return obj
+    end
+
 
     local map = TileMap(width, height)
     map.tiles = tiles
