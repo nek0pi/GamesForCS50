@@ -7,17 +7,33 @@
 
 PlayState = Class{__includes = BaseState}
 
-function PlayState:init()
+function PlayState:init(params)
     self.camX = 0
     self.camY = 0
-    self.level = LevelMaker.generate(100, 10)
-    self.tileMap = self.level.tileMap
+
     self.background = math.random(3)
     self.backgroundX = 0
 
     self.gravityOn = true
     self.gravityAmount = 6
 
+    -- for some reason knife timer doesn't work with arrays
+    -- forced to create separate values for each...
+    self.transitionAlpha = 255
+    self.transitionBeta = 255
+    self.transitionGamma = 255
+    
+end
+
+function PlayState:enter(params)
+    -- i've put it in enter so i could save params of previous instances
+    self.levelwidth = params.levelwidth or 100
+    print("Level width is: ".. self.levelwidth)
+    self.level = LevelMaker.generate(self.levelwidth, 10)
+    
+    self.tileMap = self.level.tileMap
+    
+    self.score = params.score or 0
     self.player = Player({
         x = 0, y = 0,
         width = 16, height = 20,
@@ -30,13 +46,15 @@ function PlayState:init()
         },
         map = self.tileMap,
         level = self.level
-    })
-
-    self.transitionAlpha = 255
-
-    self:spawnEnemies()
+    }, 
+    -- saving score through levels
+    self.score)
 
     self.player:changeState('falling')
+    
+    self:spawnEnemies()
+
+    gSounds['startlevel']:play()
 end
 
 function PlayState:update(dt)
@@ -57,9 +75,17 @@ function PlayState:update(dt)
     end
 
     self:updateCamera()
+
+    if won then
+        gStateMachine:change('play', {
+            score = self.player.score,
+            levelwidth = self.levelwidth + 10
+        })
+    end
 end
 
 function PlayState:render()
+    
     love.graphics.push()
     love.graphics.draw(gTextures['backgrounds'], gFrames['backgrounds'][self.background], math.floor(-self.backgroundX), 0)
     love.graphics.draw(gTextures['backgrounds'], gFrames['backgrounds'][self.background], math.floor(-self.backgroundX),
@@ -83,6 +109,7 @@ function PlayState:render()
     love.graphics.setColor(255, 255, 255, 255)
     love.graphics.print(tostring(self.player.score), 4, 4)
 
+
     -- render key if there is a key picked up
     if keypicked then 
         love.graphics.draw(gTextures['locksandkeys'], gFrames['locksandkeys'][lockcolor],
@@ -90,13 +117,31 @@ function PlayState:render()
         love.graphics.setFont(gFonts['small'])
 
         -- Make it dissapear
-        Timer.tween(1, {
+        Timer.tween(2, {
             [self] = {transitionAlpha = 0}
         })
         love.graphics.setColor(255, 255, 255, self.transitionAlpha)
         love.graphics.print("You've got a key!", VIRTUAL_WIDTH/2 - 32, 17)
     end
 
+    -- write that the pole has spawned
+    if polehasspawned then
+        love.graphics.setFont(gFonts['small'])
+
+        -- Make it dissapear
+        Timer.tween(2, {
+            [self] = {transitionBeta = 0}
+        })
+        love.graphics.setColor(255, 255, 255, self.transitionBeta)
+        love.graphics.print("The pole has spawned!", VIRTUAL_WIDTH/2 - 32, 17)
+    end
+
+        -- !our transition foreground rectangle
+        Timer.tween(2, {
+            [self] = {transitionGamma = 0}
+        })
+        love.graphics.setColor(255, 255, 255, self.transitionGamma)
+        love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
 
 end
 
@@ -123,8 +168,9 @@ function PlayState:spawnEnemies()
 
         for y = 1, self.tileMap.height do
             if not groundFound then
-                -- checks if we on the first or the one before last tile
-                if x > 1 and x < self.tileMap.width then
+                -- checks if we on the 5th or the one before last tile
+                -- 5th is not to spawn snails under MC
+                if x > 4 and x < self.tileMap.width then
                     -- if there is one more ground tile on the right or on the left spawn enemie
                     if self.tileMap.tiles[y][x].id == TILE_ID_GROUND and (self.tileMap.tiles[y][x + 1].id == TILE_ID_GROUND 
                     or self.tileMap.tiles[y][x - 1].id == TILE_ID_GROUND) then
